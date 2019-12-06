@@ -1,4 +1,5 @@
 import { Main } from './application'
+import '../../environment'
 
 export async function migrate(args: string[]) {
  const existingSchema = args.includes('--rebuild') ? 'drop' : 'alter'
