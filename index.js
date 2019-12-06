@@ -1,7 +1,6 @@
 const application = require('./dist')
 require('./environment')
 
-
 module.exports = application
 
 if (require.main === module) {
