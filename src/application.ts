@@ -9,32 +9,32 @@ import { join } from 'path'
 import { MySequence } from './sequence'
 
 export class Main extends BootMixin(
- ServiceMixin(RepositoryMixin(RestApplication))
+    ServiceMixin(RepositoryMixin(RestApplication))
 ) {
- constructor(options: ApplicationConfig = {}) {
-  super(options)
+    constructor(options: ApplicationConfig = {}) {
+        super(options)
 
-  // Set up the custom sequence
-  this.sequence(MySequence)
+        // Set up the custom sequence
+        this.sequence(MySequence)
 
-  // Set up default home page
-  this.static('/', join(__dirname, '../../public'))
+        // Set up default home page
+        this.static('/', join(__dirname, '../../public'))
 
-  // Customize @loopback/rest-explorer configuration here
-  this.bind(RestExplorerBindings.CONFIG).to({
-   path: '/api/explorer'
-  })
-  this.component(RestExplorerComponent)
+        // Customize @loopback/rest-explorer configuration here
+        this.bind(RestExplorerBindings.CONFIG).to({
+            path: '/api/explorer'
+        })
+        this.component(RestExplorerComponent)
 
-  this.projectRoot = __dirname
-  // Customize @loopback/boot Booter Conventions here
-  this.bootOptions = {
-   controllers: {
-    // Customize ControllerBooter Conventions here
-    dirs: ['controllers'],
-    extensions: ['.controller.js'],
-    nested: true
-   }
-  }
- }
+        this.projectRoot = __dirname
+        // Customize @loopback/boot Booter Conventions here
+        this.bootOptions = {
+            controllers: {
+                // Customize ControllerBooter Conventions here
+                dirs: ['controllers'],
+                extensions: ['.controller.js'],
+                nested: true
+            }
+        }
+    }
 }
