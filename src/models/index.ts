@@ -1,4 +1,5 @@
 export * from './mymodel.model'
+export * from './audit.model'
 export * from './role.model'
 export * from './user.model'
 export * from './period.model'
