@@ -8,7 +8,9 @@
     "build": "lb-tsc",
     "build:watch": "lb-tsc --watch",
     "clean": "lb-clean dist *.tsbuildinfo",
-    "lint": "npm run prettier:fix",
+    "lint": "npm run prettier:fix && npm run eslint",
+    "eslint": "lb-eslint --report-unused-disable-directives .",
+    "eslint:fix": "npm run eslint -- --fix",
     "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
     "prettier:check": "npm run prettier:cli -- -l",
     "prettier:fix": "npm run prettier:cli -- --write",
@@ -36,9 +38,16 @@
   },
   "devDependencies": {
     "@loopback/build": "^2.1.0",
+    "@loopback/eslint-config": "^4.1.5",
     "source-map-support": "^0.5.16",
     "@loopback/testlab": "^1.9.5",
     "@types/node": "^10.17.5",
+    "@typescript-eslint/eslint-plugin": "^2.9.0",
+    "@typescript-eslint/parser": "^2.9.0",
+    "eslint": "^6.7.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-eslint-plugin": "^2.1.0",
+    "eslint-plugin-mocha": "^6.2.2",
     "typescript": "~3.7.2"
   },
   "repository": {
