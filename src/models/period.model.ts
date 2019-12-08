@@ -26,10 +26,10 @@ export class Period extends MyModel {
     @property({
         type: 'string',
         required: true,
-        length: 30,
+        length: 50,
         postgresql: {
             dataType: 'character varying',
-            dataLength: 30
+            dataLength: 50
         }
     })
     label?: string

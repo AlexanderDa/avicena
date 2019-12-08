@@ -3,11 +3,11 @@ import { User } from '../models/user.model'
 import { UserProfile } from '@loopback/security'
 import { repository } from '@loopback/repository'
 
-export interface AccountService<U, P> {
-    convertToUser(userProfile: P): Promise<U>
+export interface AccountService {
+    convertToUser(userProfile: UserProfile): Promise<User>
 }
 
-export class MyAccountService implements AccountService<User, UserProfile> {
+export class MyAccountService implements AccountService {
     constructor(
         @repository(UserRepository) public userRepository: UserRepository
     ) {}

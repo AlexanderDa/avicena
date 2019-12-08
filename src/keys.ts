@@ -5,8 +5,8 @@ import { UserService } from '@loopback/authentication'
 import { User } from './models'
 import { Credentials } from './repositories'
 import { AccountService } from './services/account.service'
-import { UserProfile } from '@loopback/security'
 import { AuditService } from './services/audit.service'
+import { FileService } from './services/file.service'
 
 // Send Mail
 // https://stackoverflow.com/questions/57182231/send-email-with-loopback-4
@@ -37,13 +37,19 @@ export namespace UserBindings {
 }
 
 export namespace AccountBindings {
-    export const ACCOUNT_SERVICE = BindingKey.create<
-        AccountService<User, UserProfile>
-    >('services.account.service')
+    export const ACCOUNT_SERVICE = BindingKey.create<AccountService>(
+        'services.account.service'
+    )
 }
 
 export namespace AuditBindings {
-    export const AUDIT_SERVICE = BindingKey.create<AuditService<User>>(
+    export const AUDIT_SERVICE = BindingKey.create<AuditService>(
         'services.audit.service'
+    )
+}
+
+export namespace FileBindings {
+    export const FILE_SERVICE = BindingKey.create<FileService>(
+        'services.file.service'
     )
 }

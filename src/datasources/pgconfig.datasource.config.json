@@ -1,5 +1,5 @@
 {
   "name": "pgconfig",
   "connector": "postgresql",
-  "url": "postgresql://postgres:postgres@localhost/avicena"
+  "url": "postgresql://postgres:postgres@localhost:5432/avicena"
 }

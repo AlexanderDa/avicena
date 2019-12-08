@@ -1,0 +1,8 @@
+{
+    "storage": {
+        "allowedImages": [
+            "image/png",
+            "image/jpeg"
+        ]
+    }
+}

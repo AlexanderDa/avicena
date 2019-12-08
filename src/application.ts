@@ -1,15 +1,17 @@
 import { BootMixin } from '@loopback/boot'
-import { ApplicationConfig, BindingKey } from '@loopback/core'
+import { ApplicationConfig } from '@loopback/core'
+import { BindingKey } from '@loopback/core'
 import { RestExplorerBindings } from '@loopback/rest-explorer'
 import { RestExplorerComponent } from '@loopback/rest-explorer'
 import { RepositoryMixin } from '@loopback/repository'
 import { RestApplication } from '@loopback/rest'
 import { ServiceMixin } from '@loopback/service-proxy'
-import { join } from 'path'
+import { join, resolve } from 'path'
 import { MySequence } from './sequence'
 import { AuthenticationComponent } from '@loopback/authentication'
 import { registerAuthenticationStrategy } from '@loopback/authentication'
 import { TokenBindings } from './keys'
+import { FileBindings } from './keys'
 import { PasswordHasherBindings } from './keys'
 import { AccountBindings } from './keys'
 import { AuditBindings } from './keys'
@@ -21,6 +23,7 @@ import { SECURITY_SCHEME_SPEC } from './utils/security.spec'
 import { JWTService } from './services/jwt.service'
 import { MyUserService } from './services/user.service'
 import { JWTAuthenticationStrategy } from './authstrategies/jwt.strategy'
+import { MyFileService } from './services/file.service'
 
 /**
  * Information from package.json
@@ -60,6 +63,12 @@ export class Main extends BootMixin(
 
         // Set up default home page
         this.static('/', join(__dirname, '../../public'))
+
+        // Set image route
+        this.static(
+            '/file/image',
+            resolve(`${process.env.LOADING_ROUTE}/images`)
+        )
 
         // Customize @loopback/rest-explorer configuration here
         this.bind(RestExplorerBindings.CONFIG).to({
@@ -106,5 +115,8 @@ export class Main extends BootMixin(
 
         // Audit service
         this.bind(AuditBindings.AUDIT_SERVICE).toClass(MyAuditService)
+
+        // file service
+        this.bind(FileBindings.FILE_SERVICE).toClass(MyFileService)
     }
 }

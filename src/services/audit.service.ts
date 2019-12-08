@@ -14,20 +14,30 @@ export namespace AuditTable {
     export const USER = 'usuario'
     export const PERIOD = 'periodo'
     export const HONORARY = 'honorario'
+    export const PROFESSIONAL = 'profesional'
+    export const RESERVATION = 'reservación'
 }
 
-export interface AuditService<U> {
-    auditCreated(user: U, tableName: string, elementId: number): Promise<void>
+export interface AuditService {
+    auditCreated(
+        user: User,
+        tableName: string,
+        elementId: number
+    ): Promise<void>
     auditUpdated(
-        user: U,
+        user: User,
         tableName: string,
         elementId: number,
         log?: string
     ): Promise<void>
-    auditDeleted(user: U, tableName: string, elementId: number): Promise<void>
+    auditDeleted(
+        user: User,
+        tableName: string,
+        elementId: number
+    ): Promise<void>
 }
 
-export class MyAuditService implements AuditService<User> {
+export class MyAuditService implements AuditService {
     constructor(
         @repository(UserRepository) public userRepository: UserRepository,
         @repository(AuditRepository) public auditRepository: AuditRepository
@@ -71,7 +81,7 @@ export class MyAuditService implements AuditService<User> {
         const audit: Audit = new Audit({
             createdBy: user.id,
             tableName: tableName,
-            action: AuditAction.UPDATE,
+            action: AuditAction.DELETE,
             elementId: elementId
         })
         await this.auditRepository.save(audit)
