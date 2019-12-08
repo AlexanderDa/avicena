@@ -6,10 +6,6 @@ import { PgconfigDataSource } from '../datasources'
 import { inject, Getter } from '@loopback/core'
 import { RoleRepository } from './role.repository'
 
-export type Credentials = {
-    email: string
-    password: string
-}
 
 export class UserRepository extends DefaultCrudRepository<
     User,

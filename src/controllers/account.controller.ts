@@ -14,7 +14,7 @@ import { TokenService } from '@loopback/authentication'
 import { UserService } from '@loopback/authentication'
 import { UserProfile } from '@loopback/security'
 import { SecurityBindings } from '@loopback/security'
-import { Credentials } from '../repositories/user.repository'
+import { Credentials } from '../../common/Credentials'
 import { PasswordHasher } from '../services/hash.password.bcryptjs'
 import { TokenBindings, FileBindings } from '../keys'
 import { AccountBindings } from '../keys'
@@ -25,6 +25,7 @@ import { AccountService } from '../services/account.service'
 import { UserSpect } from './specs/user.spect'
 import AccountSpects from './specs/account.spect'
 import { FileService } from '../services/file.service'
+
 
 // Uncomment these imports to begin using these cool features!
 

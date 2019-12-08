@@ -24,18 +24,14 @@ import { JWTService } from './services/jwt.service'
 import { MyUserService } from './services/user.service'
 import { JWTAuthenticationStrategy } from './authstrategies/jwt.strategy'
 import { MyFileService } from './services/file.service'
+import { AppInfo } from '../common/AppInfo'
+import { appInfo } from '../common/AppInfo'
 
 /**
  * Information from package.json
  */
-export interface PackageInfo {
-    name: string
-    version: string
-    description: string
-}
-export const PackageKey = BindingKey.create<PackageInfo>('application.package')
 
-const pkg: PackageInfo = require('../../package.json')
+export const PackageKey = BindingKey.create<AppInfo>('application.package')
 
 export class Main extends BootMixin(
     ServiceMixin(RepositoryMixin(RestApplication))
@@ -45,7 +41,7 @@ export class Main extends BootMixin(
 
         this.api({
             openapi: '3.0.0',
-            info: { title: pkg.name, version: pkg.version },
+            info: { title: appInfo.name, version: appInfo.version },
             paths: {},
             components: { securitySchemes: SECURITY_SCHEME_SPEC },
             servers: [{ url: '/' }]
@@ -90,7 +86,7 @@ export class Main extends BootMixin(
 
     setUpBindings(): void {
         // Bind package.json to the application context
-        this.bind(PackageKey).to(pkg)
+        this.bind(PackageKey).to(appInfo)
 
         this.bind(TokenBindings.TOKEN_SECRET).to(process.env.TOKEN_SECRET || '')
 

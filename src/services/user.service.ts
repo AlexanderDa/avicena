@@ -1,6 +1,6 @@
 import { inject } from '@loopback/context'
 import { HttpErrors } from '@loopback/rest'
-import { Credentials } from '../repositories/user.repository'
+import { Credentials } from '../../common/Credentials'
 import { UserRepository } from '../repositories/user.repository'
 import { User } from '../models/user.model'
 import { UserService } from '@loopback/authentication'
