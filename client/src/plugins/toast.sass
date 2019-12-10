@@ -1,0 +1,23 @@
+.toasted-container
+    padding:0px!important
+    top: 10px!important
+    right: 10px!important
+.toast    
+    border-left: solid 7px rgba(0, 0, 0, .15)
+    border-radius: 5px!important
+    display: grid
+    grid-template-columns: repeat(2, 1fr)
+    grid-template-rows: 1fr
+    grid-column-gap: 5px
+    grid-row-gap: 0px
+    .icon 
+        grid-area: 1 / 1 / 2 / 2
+        margin: auto
+        font-size: 40px
+    .content 
+        grid-area: 1 / 2 / 2 / 3
+        .message
+            min-width: 300px
+            max-width: 300px
+            overflow: auto
+            margin-top: 4px

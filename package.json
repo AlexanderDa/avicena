@@ -23,6 +23,7 @@
     "docker:run": "docker run -p 3000:3000 -d avicena",
     "migrate": "node ./dist/src/migrate",
     "prestart": "npm run build",
+    "serve":"npm run start && cd client && yarn serve",
     "start": "node -r source-map-support/register .",
     "prepublishOnly": "npm run test"
   },
