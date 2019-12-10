@@ -26,7 +26,6 @@ import { UserSpect } from './specs/user.spect'
 import AccountSpects from './specs/account.spect'
 import { FileService } from '../services/file.service'
 
-
 // Uncomment these imports to begin using these cool features!
 
 export class AccountController {

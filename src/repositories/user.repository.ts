@@ -6,7 +6,6 @@ import { PgconfigDataSource } from '../datasources'
 import { inject, Getter } from '@loopback/core'
 import { RoleRepository } from './role.repository'
 
-
 export class UserRepository extends DefaultCrudRepository<
     User,
     typeof User.prototype.id,
@@ -25,5 +24,18 @@ export class UserRepository extends DefaultCrudRepository<
             roleRepositoryGetter
         )
         this.registerInclusionResolver('role', this.role.inclusionResolver)
+    }
+}
+
+
+export class SimpleUserRepository extends DefaultCrudRepository<
+    User,
+    typeof User.prototype.id,
+    UserRelations
+    > {
+    constructor(
+        @inject('datasources.pgconfig') dataSource: PgconfigDataSource
+    ) {
+        super(User, dataSource)
     }
 }

@@ -41,7 +41,11 @@ export class Main extends BootMixin(
 
         this.api({
             openapi: '3.0.0',
-            info: { title: appInfo.name, version: appInfo.version },
+            info: {
+                title: appInfo.name,
+                version: appInfo.version,
+                description: appInfo.description
+            },
             paths: {},
             components: { securitySchemes: SECURITY_SCHEME_SPEC },
             servers: [{ url: '/' }]

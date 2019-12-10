@@ -32,6 +32,7 @@ export class ProfessionalController {
     ) {}
 
     @post('/api/professional', new ProfessionalSpect().created())
+    @authenticate('jwt')
     async create(
         @requestBody(new ProfessionalSpect().create())
         professional: Omit<Professional, 'id'>
@@ -40,6 +41,7 @@ export class ProfessionalController {
     }
 
     @get('/api/professionals/count', new ProfessionalSpect().count())
+    @authenticate('jwt')
     async count(
         @param.query.object('where', getWhereSchemaFor(Professional))
         where?: Where<Professional>
@@ -48,6 +50,7 @@ export class ProfessionalController {
     }
 
     @get('/api/professionals', new ProfessionalSpect().found())
+    @authenticate('jwt')
     async find(
         @param.query.object('filter', getFilterSchemaFor(Professional))
         filter?: Filter<Professional>
@@ -56,6 +59,7 @@ export class ProfessionalController {
     }
 
     @patch('/api/professional', new ProfessionalSpect().count())
+    @authenticate('jwt')
     async updateAll(
         @requestBody(new ProfessionalSpect().partial())
         professional: Professional,
@@ -66,6 +70,7 @@ export class ProfessionalController {
     }
 
     @get('/api/professional/{id}', new ProfessionalSpect().created())
+    @authenticate('jwt')
     async findById(
         @param.path.number('id') id: number,
         @param.query.object('filter', getFilterSchemaFor(Professional))
@@ -75,6 +80,7 @@ export class ProfessionalController {
     }
 
     @get('/api/professional/user/{id}', new ProfessionalSpect().created())
+    @authenticate('jwt')
     async findByUser(
         @param.path.number('id') id: number
     ): Promise<Professional> {
@@ -89,6 +95,7 @@ export class ProfessionalController {
         '/api/professional/{id}',
         new ProfessionalSpect().simple('Professional PATCH success')
     )
+    @authenticate('jwt')
     async updateById(
         @param.path.number('id') id: number,
         @requestBody(new ProfessionalSpect().partial())
@@ -101,6 +108,7 @@ export class ProfessionalController {
         '/api/professional/{id}',
         new ProfessionalSpect().simple('Professional PUT success')
     )
+    @authenticate('jwt')
     async replaceById(
         @param.path.number('id') id: number,
         @requestBody() professional: Professional
