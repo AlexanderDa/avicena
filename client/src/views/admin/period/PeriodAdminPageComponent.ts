@@ -8,6 +8,7 @@ import Notify from '@/components/action/Notify'
 import Delete from '@/components/widget/DeleteWidget.vue'
 import DateWidget from '@/components/widget/DateWidget.vue'
 import { formatDate } from '@/util'
+import { errorService } from '@/services/Service'
 
 @Component({
   name: 'PeriodView',
@@ -64,7 +65,7 @@ export default class PeriodView extends Vue implements PageService<PeriodModel> 
         this.elements.push(element)
         this.notyfy.success('Periodo guardado')
       })
-      .catch(() => { })
+      .catch((err) => { errorService(err) })
   }
 
   findElements (): void {
@@ -78,7 +79,7 @@ export default class PeriodView extends Vue implements PageService<PeriodModel> 
           this.elements.push(element)
         })
       })
-      .catch(() => { })
+      .catch((err) => { errorService(err) })
   }
 
   updateElement (): void {
@@ -89,7 +90,7 @@ export default class PeriodView extends Vue implements PageService<PeriodModel> 
         Object.assign(this.elements[this.elementIndex], this.element)
         this.notyfy.success('Periodo actualizado')
       })
-      .catch(() => { })
+      .catch((err) => { errorService(err) })
   }
 
   deleteElement (element: PeriodModel): void {
@@ -100,7 +101,7 @@ export default class PeriodView extends Vue implements PageService<PeriodModel> 
         this.elements.splice(index, 1)
         this.notyfy.success('Honorario eliminado')
       })
-      .catch(() => { })
+      .catch((err) => { errorService(err) })
   }
 
   toEditElement (element: PeriodModel): void {

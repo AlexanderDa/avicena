@@ -1,4 +1,5 @@
 export default class Model {
-    public createdBy?: number
-    public createdAt?: string
+    public readonly createdBy: number | undefined;
+    public readonly createdAt: string | undefined;
+    public readonly id!: number;
 }

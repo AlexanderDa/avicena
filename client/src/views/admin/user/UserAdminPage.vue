@@ -5,7 +5,7 @@
       :items="elements"
       :search="search"
       hide-default-footer
-      sort-by="calories"
+      sort-by="username"
       class="elevation-1"
     >
       <template v-slot:top>
@@ -22,7 +22,10 @@
             clearable
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn color="secondary" icon @click="dialog=true">
+          <v-btn color="primary" dark icon @click="findElements()">
+            <v-icon>refresh</v-icon>
+          </v-btn>
+          <v-btn color="primary" icon @click="dialog=true">
             <v-icon>add</v-icon>
           </v-btn>
         </v-toolbar>

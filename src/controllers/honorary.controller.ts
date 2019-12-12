@@ -98,7 +98,6 @@ export class HonoraryController {
         @requestBody(new HonorarySpect().update())
         honorary: Honorary
     ): Promise<void> {
-        console.log(honorary)
         await this.honoraryRepository.updateById(id, honorary)
     }
 

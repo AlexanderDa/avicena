@@ -35,7 +35,7 @@
             </v-navigation-drawer>
 
             <v-app-bar app color="primary" dark clipped-left>
-                <img src="@/assets/logo.svg" width="50px" />
+                <!--img src="@/assets/logo.svg" width="50px" /-->
                 <v-btn icon @click="drawer=!drawer">
                     <v-icon>menu</v-icon>
                 </v-btn>

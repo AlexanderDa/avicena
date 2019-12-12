@@ -8,6 +8,7 @@ import Delete from '@/components/widget/DeleteWidget.vue'
 import { Watch } from 'vue-property-decorator'
 import AccountService from '@/services/AccountService'
 import UserModel from '@/models/UserModel'
+import { errorService } from '@/services/Service'
 
 @Component({
   name: 'ProfessionalAdminPageController',
@@ -61,7 +62,7 @@ export default class ProfessionalAdminPageController extends Vue
         this.elements.push(element)
         this.notyfy.success('Profesional guardado')
       })
-      .catch(() => {})
+      .catch((err) => { errorService(err) })
   }
   findElements (): void {
     const service: ProfessionalService = new ProfessionalService()
@@ -69,7 +70,7 @@ export default class ProfessionalAdminPageController extends Vue
       .then((elements: ProfessionalModel[]) => {
         this.elements = elements
       })
-      .catch(() => {})
+      .catch((err) => { errorService(err) })
   }
   updateElement (): void {
     const service: ProfessionalService = new ProfessionalService()
@@ -78,7 +79,7 @@ export default class ProfessionalAdminPageController extends Vue
         Object.assign(this.elements[this.elementIndex], this.element)
         this.notyfy.success('Profesional actualizado')
       })
-      .catch(() => {})
+      .catch((err) => { errorService(err) })
   }
   deleteElement (element: ProfessionalModel): void {
     const service: ProfessionalService = new ProfessionalService()
@@ -88,7 +89,7 @@ export default class ProfessionalAdminPageController extends Vue
         this.elements.splice(index, 1)
         this.notyfy.success('Honorario eliminado')
       })
-      .catch(() => {})
+      .catch((err) => { errorService(err) })
   }
   toEditElement (element: ProfessionalModel): void {
     this.elementIndex = this.elements.indexOf(element)

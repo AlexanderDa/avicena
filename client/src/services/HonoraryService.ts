@@ -6,14 +6,11 @@ import HonoraryModel from '@/models/HonoraryModel'
 export default class HonoraryService extends Vue implements Service<HonoraryModel> {
   async create (element: HonoraryModel): Promise<HonoraryModel> {
     let honorary: HonoraryModel = new HonoraryModel()
-    element.value = Number(element.value)
-    element.rate = Number(element.rate)
-    element.mps = Number(element.mps)
     try {
-      const res: any = await this.$http.post('/api/honorary', element)
+      const res: any = await this.$http.post('/api/honorary', this.formBody(element))
       honorary = res.body
     } catch (err) {
-      throw err.body
+      throw err
     }
     return honorary
   }
@@ -27,7 +24,7 @@ export default class HonoraryService extends Vue implements Service<HonoraryMode
       const res: any = await this.$http.get('/api/honoraries')
       list = res.body
     } catch (err) {
-      throw err.body
+      throw err
     }
     return list
   }
@@ -36,17 +33,12 @@ export default class HonoraryService extends Vue implements Service<HonoraryMode
   }
 
   async updateById (element: HonoraryModel): Promise<boolean> {
-    let updated:boolean = false
-    element.createdAt = undefined
-    element.createdBy = undefined
-    element.value = Number(element.value)
-    element.rate = Number(element.rate)
-    element.mps = Number(element.mps)
+    let updated: boolean = false
     try {
-      const res: any = await this.$http.patch(`/api/honorary/${element.id}`, element)
+      const res: any = await this.$http.patch(`/api/honorary/${element.id}`, this.formBody(element))
       updated = res.ok
     } catch (err) {
-      throw err.body
+      throw err
     }
     return updated
   }
@@ -57,8 +49,18 @@ export default class HonoraryService extends Vue implements Service<HonoraryMode
       const res: any = await this.$http.delete(`/api/honorary/${id}`)
       success = res.ok
     } catch (err) {
-      throw err.body
+      throw err
     }
     return success
+  }
+
+  formBody (element: HonoraryModel): HonoraryModel {
+    console.log(element)
+    let honorary: HonoraryModel = new HonoraryModel()
+    honorary.description = element.description
+    honorary.value = Number(element.value)
+    honorary.rate = Number(element.rate)
+    honorary.mps = Number(element.mps)
+    return honorary
   }
 }

@@ -13,7 +13,7 @@ export default class AccountService extends Vue {
       const res: any = await this.$http.get('/api/account/me')
       user = res.body
     } catch (err) {
-      throw err.body
+      throw err
     }
     return user
   }
@@ -24,7 +24,7 @@ export default class AccountService extends Vue {
       const res: any = await this.$http.get(`/api/account/${emailAddress}`)
       user = res.body
     } catch (err) {
-      throw err.body
+      throw err
     }
     return user
   }

@@ -6,6 +6,7 @@ import UserService from '@/services/UserService'
 import PageService from '@/views/PageService'
 import Notify from '@/components/action/Notify'
 import Delete from '@/components/widget/DeleteWidget.vue'
+import { errorService } from '@/services/Service'
 
 @Component({
   name: 'UserAdminPage',
@@ -58,21 +59,31 @@ export default class UserAdminPage extends Vue
   ********************************************************/
 
   createElement (): void {
+    console.log(this.imageFile)
     const service: UserService = new UserService()
     service.create(this.element)
       .then((element: UserModel) => {
-        this.elements.push(element)
+        if (this.imageFile !== null) {
+          var formData = new FormData()
+          formData.append('image', this.imageFile)
+          service.avatar(element.id, formData)
+            .then((url: string) => {
+              element.image = url
+              this.elements.push(element)
+            })
+        } else this.elements.push(element)
         this.notyfy.success('Usuario creado')
       })
-      .catch(() => { })
+      .catch((err) => { errorService(err) })
   }
+
   findElements (): void {
     const service: UserService = new UserService()
     service.find()
       .then((elements: UserModel[]) => {
         this.elements = elements
       })
-      .catch(() => { })
+      .catch((err) => { errorService(err) })
   }
   findRoles (): void {
     this.$http.get('/api/roles')
@@ -83,12 +94,21 @@ export default class UserAdminPage extends Vue
 
   updateElement (): void {
     const service: UserService = new UserService()
+    console.log(this.imageFile)
     service.updateById(this.element)
-      .then(() => {
-        Object.assign(this.elements[this.elementIndex], this.element)
+      .then(async () => {
+        if (this.imageFile !== null) {
+          var formData = new FormData()
+          formData.append('image', this.imageFile)
+          service.avatar(this.element.id, formData)
+            .then((url: string) => {
+              this.element.image = url
+              Object.assign(this.elements[this.elementIndex], this.element)
+            })
+        } else { Object.assign(this.elements[this.elementIndex], this.element) }
         this.notyfy.success('Usuario actualizado')
       })
-      .catch(() => { })
+      .catch((err) => { errorService(err) })
   }
 
   deleteElement (element: UserModel): void {
@@ -99,7 +119,7 @@ export default class UserAdminPage extends Vue
         this.elements.splice(index, 1)
         this.notyfy.success('Usuario eliminado')
       })
-      .catch(() => { })
+      .catch((err) => { errorService(err) })
   }
 
   toEditElement (element: UserModel): void {
@@ -128,6 +148,8 @@ export default class UserAdminPage extends Vue
   close (): void {
     this.dialog = false
     setTimeout(() => {
+      this.imageData = null
+      this.imageFile = null
       this.element = Object.assign({}, new UserModel())
       this.elementIndex = -1
     }, 300)
@@ -144,10 +166,8 @@ export default class UserAdminPage extends Vue
   }
 
   onFilePicked (event: any): void {
-    this.imageFile = event.target.files[0]
-
     const files = event.target.files
-    if (this.imageFile !== undefined) {
+    if (files[0] !== undefined) {
       const fr = new FileReader()
       fr.readAsDataURL(files[0])
       fr.addEventListener('load', () => {
@@ -155,8 +175,8 @@ export default class UserAdminPage extends Vue
         this.imageFile = files[0]
       })
     } else {
-      this.imageFile = ''
-      this.imageData = ''
+      this.imageFile = null
+      this.imageData = null
     }
   }
 }

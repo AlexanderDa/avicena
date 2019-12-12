@@ -1,16 +1,20 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import AccountService from '@/services/AccountService'
+import { AppInfo, appInfo } from '@/common'
 
 @Component({ name: 'LoginPage' })
 export default class LoginPage extends Vue {
+  public app: AppInfo = appInfo
   public username: string = '';
   public password: string = '';
   public error: boolean = false;
   public errorMsg: string = '';
   public loading: boolean = false
+  public showPass: boolean = true
 
   public async login () {
+    this.showPass = true
     this.loading = true
     const service: AccountService = new AccountService()
     await service.login({

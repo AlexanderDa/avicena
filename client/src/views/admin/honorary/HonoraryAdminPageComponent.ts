@@ -5,6 +5,7 @@ import PageService from '@/views/PageService'
 import HonoraryService from '@/services/HonoraryService'
 import Notify from '@/components/action/Notify'
 import Delete from '@/components/widget/DeleteWidget.vue'
+import { errorService } from '@/services/Service'
 
 @Component({
   name: 'HonoraryAdminPageController',
@@ -55,7 +56,7 @@ export default class HonoraryAdminPageComponent extends Vue implements PageServi
         this.elements.push(element)
         this.notyfy.success('Honorario guardado')
       })
-      .catch(() => {})
+      .catch((err) => { errorService(err) })
   }
   findElements (): void {
     const service: HonoraryService = new HonoraryService()
@@ -63,7 +64,7 @@ export default class HonoraryAdminPageComponent extends Vue implements PageServi
       .then((elements: HonoraryModel[]) => {
         this.elements = elements
       })
-      .catch(() => {})
+      .catch((err) => { errorService(err) })
   }
   updateElement (): void {
     const service: HonoraryService = new HonoraryService()
@@ -72,7 +73,7 @@ export default class HonoraryAdminPageComponent extends Vue implements PageServi
         Object.assign(this.elements[this.elementIndex], this.element)
         this.notyfy.success('Honorario actualizado')
       })
-      .catch(() => {})
+      .catch((err) => { errorService(err) })
   }
   deleteElement (element: HonoraryModel): void {
     const service: HonoraryService = new HonoraryService()
@@ -82,7 +83,7 @@ export default class HonoraryAdminPageComponent extends Vue implements PageServi
         this.elements.splice(index, 1)
         this.notyfy.success('Honorario eliminado')
       })
-      .catch(() => {})
+      .catch((err) => { errorService(err) })
   }
   toEditElement (element: HonoraryModel): void {
     this.elementIndex = this.elements.indexOf(element)

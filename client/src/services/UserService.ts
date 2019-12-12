@@ -7,12 +7,27 @@ export default class UserService extends Vue implements Service<UserModel> {
   async create (element: UserModel): Promise<UserModel> {
     let user: UserModel = new UserModel()
     try {
-      const res: any = await this.$http.post('/api/user', element)
+      const res: any = await this.$http.post('/api/user', this.formBody(element))
       user = res.body
     } catch (err) {
-      throw err.body
+      throw err
     }
     return user
+  }
+
+  async avatar (id: number, data: FormData): Promise<string> {
+    let url: string = ''
+    try {
+      const res: any = await this.$http.post(`/api/user/${id}/avatar`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      url = res.body.url
+    } catch (err) {
+      throw err
+    }
+    return url
   }
 
   count (): Promise<number> {
@@ -26,7 +41,7 @@ export default class UserService extends Vue implements Service<UserModel> {
       const res: any = await this.$http.get('/api/users')
       list = res.body
     } catch (err) {
-      throw err.body
+      throw err
     }
     return list
   }
@@ -37,14 +52,11 @@ export default class UserService extends Vue implements Service<UserModel> {
 
   async updateById (element: UserModel): Promise<boolean> {
     let updated: boolean = false
-    element.createdAt = undefined
-    element.createdBy = undefined
-    element.image = (element.image) ? element.image : undefined
     try {
-      const res: any = await this.$http.patch(`/api/user/${element.id}`, element)
+      const res: any = await this.$http.patch(`/api/user/${element.id}`, this.formBody(element))
       updated = res.ok
     } catch (err) {
-      throw err.body
+      throw err
     }
     return updated
   }
@@ -55,8 +67,17 @@ export default class UserService extends Vue implements Service<UserModel> {
       const res: any = await this.$http.delete(`/api/user/${id}`)
       success = res.ok
     } catch (err) {
-      throw err.body
+      throw err
     }
     return success
+  }
+
+  formBody (element: UserModel): UserModel {
+    let user: UserModel = new UserModel()
+    user.username = element.username
+    user.emailAddress = element.emailAddress
+    user.isActive = element.isActive
+    user.roleId = element.roleId
+    return user
   }
 }

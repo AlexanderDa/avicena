@@ -7,15 +7,10 @@ export default class PeriodService extends Vue implements Service<PeriodModel> {
   async create (element: PeriodModel): Promise<PeriodModel> {
     let period: PeriodModel = new PeriodModel()
     try {
-      const toCreate = {
-        startDate: new Date(element.startDate || ''),
-        finishDate: new Date(element.finishDate || ''),
-        label: element.label
-      }
-      const res: any = await this.$http.post('/api/period', toCreate)
+      const res: any = await this.$http.post('/api/period', this.formBody(element))
       period = res.body
     } catch (err) {
-      throw err.body
+      throw err
     }
     return period
   }
@@ -29,7 +24,7 @@ export default class PeriodService extends Vue implements Service<PeriodModel> {
       const res: any = await this.$http.get('/api/periods')
       list = res.body
     } catch (err) {
-      throw err.body
+      throw err
     }
     return list
   }
@@ -39,17 +34,11 @@ export default class PeriodService extends Vue implements Service<PeriodModel> {
 
   async updateById (element: PeriodModel): Promise<boolean> {
     let updated: boolean = false
-    const toUpdate = {
-      startDate: new Date(element.startDate || ''),
-      finishDate: new Date(element.finishDate || ''),
-      label: element.label,
-      isActive: element.isActive
-    }
     try {
-      const res: any = await this.$http.patch(`/api/period/${element.id}`, toUpdate)
+      const res: any = await this.$http.patch(`/api/period/${element.id}`, this.formBody(element))
       updated = res.ok
     } catch (err) {
-      throw err.body
+      throw err
     }
     return updated
   }
@@ -60,8 +49,18 @@ export default class PeriodService extends Vue implements Service<PeriodModel> {
       const res: any = await this.$http.delete(`/api/period/${id}`)
       success = res.ok
     } catch (err) {
-      throw err.body
+      throw err
     }
     return success
+  }
+
+  formBody (element: PeriodModel): PeriodModel {
+    let period:PeriodModel = new PeriodModel()
+    console.log(element)
+    period.startDate = new Date(element.startDate || '')
+    period.finishDate = new Date(element.finishDate || '')
+    period.label = element.label
+    period.isActive = element.isActive
+    return period
   }
 }

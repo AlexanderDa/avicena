@@ -155,7 +155,14 @@ export class UserController {
         @param.path.number('id') id: number
     ): Promise<void> {
         try {
+            const user: User = await this.userRepository.findById(id)
+
+            const oldImage: URL | undefined = user.image
+                ? new URL(user.image)
+                : undefined
+            if (oldImage) this.fileService.deleteFile(oldImage)
             await this.userRepository.deleteById(id)
+
             await this.auditService.auditDeleted(
                 await this.acountService.convertToUser(profile),
                 AuditTable.USER,

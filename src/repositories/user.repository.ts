@@ -27,12 +27,11 @@ export class UserRepository extends DefaultCrudRepository<
     }
 }
 
-
 export class SimpleUserRepository extends DefaultCrudRepository<
     User,
     typeof User.prototype.id,
     UserRelations
-    > {
+> {
     constructor(
         @inject('datasources.pgconfig') dataSource: PgconfigDataSource
     ) {
