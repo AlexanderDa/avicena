@@ -65,3 +65,7 @@ typings/
 
 # Upload dir
 .uploads
+uploads
+
+# App config
+app.config.json

@@ -1,16 +1,14 @@
-import { Main } from './application'
-import '../../environment'
-
+import { Main } from '../src/application'
 import { repository } from '@loopback/repository'
 import { Count } from '@loopback/repository'
-import { User } from './models'
-import { Role } from './models'
-import { PgconfigDataSource } from './datasources'
+import { User } from '../src/models'
+import { Role } from '../src/models'
+import { PgconfigDataSource } from '../src/datasources'
 import { inject } from '@loopback/core'
-import { RoleRepository } from './repositories'
-import { SimpleUserRepository } from './repositories'
-import { BcryptHasher } from './services/hash.password.bcryptjs'
-import { PasswordHasherBindings } from './keys'
+import { RoleRepository } from '../src/repositories'
+import { SimpleUserRepository } from '../src/repositories'
+import { BcryptHasher } from '../src/services/hash.password.bcryptjs'
+import { PasswordHasherBindings } from '../src/keys'
 import { Roles } from '../common/Roles'
 
 class DefaultValues {
@@ -85,8 +83,3 @@ export async function migrate(args: string[]) {
     // We need to exit explicitly.
     process.exit(0)
 }
-
-migrate(process.argv).catch(err => {
-    console.error('Cannot migrate database schema', err)
-    process.exit(1)
-})

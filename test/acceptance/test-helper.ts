@@ -2,7 +2,6 @@ import { Main } from '../../src'
 import { createRestAppClient } from '@loopback/testlab'
 import { givenHttpServerConfig } from '@loopback/testlab'
 import { Client } from '@loopback/testlab'
-import '../../../environment.js'
 
 export async function setupApplication(): Promise<AppWithClient> {
     const restConfig = givenHttpServerConfig({
