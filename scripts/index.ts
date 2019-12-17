@@ -1,37 +1,71 @@
-import { prompt } from 'inquirer'
+import { prompt as Prompt } from 'inquirer'
+import { QuestionCollection } from 'inquirer'
 import { createEF } from './env'
 import { migrate } from './migrate'
 
-prompt({
-    type: 'list',
-    name: 'options',
-    message: 'What would you like to do?',
-    choices: [
-        { value: 'createEF', name: 'Create variables file' },
-        { value: 'migrate', name: 'Migrate the database' }
-    ]
-})
-    .then(async answer => {
-        const options: string[] = answer.options
-        if (options.includes('createEF')) await createEF()
+class Script {
+    async init(): Promise<void> {
+        // eslint-disable-next-line
+        let exit: boolean = false
+        do {
+            this.clear()
+            exit = await this.menu()
+        } while (!exit)
+    }
 
-        if (options.includes('migrate')) {
-            prompt({
-                type: 'confirm',
-                name: 'rebuild',
-                default: false,
-                message: 'rebuild database?'
-            })
-                .then(confirm => {
-                    const migrationArgs: string[] = []
-                    if (confirm.rebuild) migrationArgs.push('--rebuild')
-
-                    migrate(migrationArgs).catch(err => {
-                        console.error('Cannot migrate database schema', err)
-                        process.exit(1)
-                    })
-                })
-                .catch(() => {})
+    private async menu(): Promise<boolean> {
+        // eslint-disable-next-line
+        let exit: boolean = false
+        const questions: QuestionCollection = {
+            type: 'list',
+            name: 'option',
+            message: 'What would you like to do?',
+            choices: [
+                { value: 'createEF', name: 'Create variables file' },
+                { value: 'migrate', name: 'Migrate the database' },
+                { value: 'exit', name: 'Exit' }
+            ]
         }
-    })
-    .catch(() => {})
+        const prompt = await Prompt(questions)
+        switch (prompt.option) {
+            case 'createEF':
+                await createEF()
+                break
+            case 'migrate':
+                await this.migrate()
+                break
+            case 'exit':
+                exit = true
+                break
+        }
+        return exit
+    }
+
+    private async migrate(): Promise<void> {
+        const questions: QuestionCollection = {
+            type: 'confirm',
+            name: 'rebuild',
+            default: false,
+            message: 'rebuild database?'
+        }
+        const confirm = await Prompt(questions)
+
+        await migrate(confirm.rebuild ? ['--rebuild'] : []).catch(err => {
+            console.error('Cannot migrate database schema', err)
+            process.exit(1)
+        })
+    }
+
+    private clear(): void {
+        const readline = require('readline')
+        // eslint-disable-next-line
+        // @ts-ignore
+        const blank = '\n'.repeat(process.stdout.rows)
+        console.log(blank)
+        readline.cursorTo(process.stdout, 0, 0)
+        readline.clearScreenDown(process.stdout)
+    }
+}
+
+// eslint-disable-next-line
+new Script().init()

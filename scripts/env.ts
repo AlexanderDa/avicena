@@ -1,9 +1,10 @@
 import { url as pgUrl } from '../src/datasources/pgconfig.datasource.config.json'
 import { resolve } from 'path'
-import { existsSync } from 'fs'
+import { existsSync, mkdirSync } from 'fs'
 import { writeFileSync } from 'fs'
 import { readFileSync } from 'fs'
-import { prompt } from 'inquirer'
+import { prompt as Prompt } from 'inquirer'
+import { QuestionCollection } from 'inquirer'
 const CONFIGPATH: string = resolve(__dirname, '../../app.config.json')
 
 // eslint-disable-next-line
@@ -29,7 +30,7 @@ export async function getConfig(): Promise<environment> {
 
 export async function createEF(): Promise<void> {
     const config: environment = await getConfig()
-    prompt([
+    await Prompt([
         {
             name: 'domain',
             message: 'Domain',
@@ -59,8 +60,23 @@ export async function createEF(): Promise<void> {
             default: config.jwtKey ? config.jwtKey : 'myjwts3cr3t'
         }
     ])
-        .then(result => {
+        .then(async result => {
             writeFileSync(CONFIGPATH, JSON.stringify(result, null, '\t'))
+            if (!existsSync(result.loading)) {
+                const IMGPATH = resolve(result.loading, 'images')
+                const questions: QuestionCollection = {
+                    type: 'confirm',
+                    name: 'images',
+                    default: true,
+                    message: 'create image folder?'
+                }
+                const confirm = await Prompt(questions)
+                console.log(IMGPATH, confirm)
+
+                if (confirm.images) {
+                    mkdirSync(IMGPATH, { recursive: true })
+                }
+            }
         })
         .catch(() => {})
 }
