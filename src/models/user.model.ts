@@ -12,6 +12,14 @@ import { Role } from './role.model'
             'passwordResetToken',
             'passwordResetTokenDate'
         ],
+        foreignKeys: {
+            fkUserRole: {
+                name: 'fk_user_role',
+                entity: 'Role',
+                entityKey: 'id',
+                foreignKey: 'roleid'
+            }
+        },
         indexes: {
             uniqueEmail: {
                 keys: { emailAddress: 1 },

@@ -4,7 +4,18 @@ import { property } from '@loopback/repository'
 import { MyModel } from '.'
 import { Professional } from './professional.model'
 
-@model()
+@model({
+    settings: {
+        foreignKeys: {
+            fkDoctorProfessional: {
+                name: 'fk_doctor_professional',
+                entity: 'Professional',
+                entityKey: 'id',
+                foreignKey: 'professionalid'
+            }
+        }
+    }
+})
 export class Doctor extends MyModel {
     @property({
         type: 'number',

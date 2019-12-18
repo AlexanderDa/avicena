@@ -6,7 +6,30 @@ import { Doctor } from './doctor.model'
 import { Honorary } from './honorary.model'
 import { Period } from './period.model'
 
-@model()
+@model({
+    settings: {
+        foreignKeys: {
+            fkReservationDoctor: {
+                name: 'fk_reservation_doctor',
+                entity: 'Doctor',
+                entityKey: 'id',
+                foreignKey: 'doctorid'
+            },
+            fkReservationHonorary: {
+                name: 'fk_reservation_honorary',
+                entity: 'Honorary',
+                entityKey: 'id',
+                foreignKey: 'honoraryid'
+            },
+            fkReservationPeriod: {
+                name: 'fk_reservation_period',
+                entity: 'Period',
+                entityKey: 'id',
+                foreignKey: 'periodid'
+            }
+        }
+    }
+})
 export class Reservation extends MyModel {
     @property({
         type: 'number',

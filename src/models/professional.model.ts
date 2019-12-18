@@ -2,7 +2,18 @@ import { model, property, belongsTo } from '@loopback/repository'
 import { MyModel } from '.'
 import { User } from './user.model'
 
-@model()
+@model({
+    settings: {
+        foreignKeys: {
+            fkProfessionalUser: {
+                name: 'fk_professional_user',
+                entity: 'dbuser',
+                entityKey: 'id',
+                foreignKey: 'userid'
+            }
+        }
+    }
+})
 export class Professional extends MyModel {
     @property({
         type: 'number',
