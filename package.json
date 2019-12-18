@@ -24,7 +24,7 @@
     "prestart": "npm run build",
     "serve": "npm run start & cd client && npm run serve",
     "start": "node -r source-map-support/register .",
-    "config:app": "node dist/scripts",
+    "cli": "node dist/scripts",
     "prepublishOnly": "npm run test"
   },
   "dependencies": {

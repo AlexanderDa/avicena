@@ -14,7 +14,7 @@ export function init() {
         }
     } else {
         console.error(
-            `\x1b[31m${CONFIGPATH} doesn't exist, try npm run config:app\x1b[0m`
+            `\x1b[31m${CONFIGPATH} doesn't exist, try npm run cli\x1b[0m`
         )
     }
 
