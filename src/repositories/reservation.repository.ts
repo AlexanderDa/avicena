@@ -1,7 +1,7 @@
 import { DefaultCrudRepository } from '@loopback/repository'
 import { repository } from '@loopback/repository'
 import { BelongsToAccessor } from '@loopback/repository'
-import { Reservation } from '../models'
+import { Reservation, Surgeryroom } from '../models'
 import { ReservationRelations } from '../models'
 import { Doctor } from '../models'
 import { Honorary } from '../models'
@@ -12,6 +12,7 @@ import { Getter } from '@loopback/core'
 import { DoctorRepository } from './doctor.repository'
 import { HonoraryRepository } from './honorary.repository'
 import { PeriodRepository } from './period.repository'
+import { SurgeryroomRepository } from './surgeryroom.repository'
 
 export class ReservationRepository extends DefaultCrudRepository<
     Reservation,
@@ -33,6 +34,11 @@ export class ReservationRepository extends DefaultCrudRepository<
         typeof Reservation.prototype.id
     >
 
+    public readonly surgeryroom: BelongsToAccessor<
+        Surgeryroom,
+        typeof Reservation.prototype.id
+    >
+
     constructor(
         @inject('datasources.pgconfig') dataSource: PgconfigDataSource,
         @repository.getter('DoctorRepository')
@@ -40,9 +46,19 @@ export class ReservationRepository extends DefaultCrudRepository<
         @repository.getter('HonoraryRepository')
         protected honoraryRepositoryGetter: Getter<HonoraryRepository>,
         @repository.getter('PeriodRepository')
-        protected periodRepositoryGetter: Getter<PeriodRepository>
+        protected periodRepositoryGetter: Getter<PeriodRepository>,
+        @repository.getter('SurgeryroomRepository')
+        protected surgeryroomRepositoryGetter: Getter<SurgeryroomRepository>
     ) {
         super(Reservation, dataSource)
+        this.surgeryroom = this.createBelongsToAccessorFor(
+            'surgeryroom',
+            surgeryroomRepositoryGetter
+        )
+        this.registerInclusionResolver(
+            'surgeryroom',
+            this.surgeryroom.inclusionResolver
+        )
         this.period = this.createBelongsToAccessorFor(
             'period',
             periodRepositoryGetter

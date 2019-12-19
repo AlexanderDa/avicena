@@ -16,6 +16,7 @@ export namespace AuditTable {
     export const HONORARY = 'honorario'
     export const PROFESSIONAL = 'profesional'
     export const RESERVATION = 'reservación'
+    export const SURGERYROOM = 'Quirófano'
 }
 
 export interface AuditService {

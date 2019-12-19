@@ -5,6 +5,7 @@ import { MyModel } from '.'
 import { Doctor } from './doctor.model'
 import { Honorary } from './honorary.model'
 import { Period } from './period.model'
+import { Surgeryroom } from './surgeryroom.model'
 
 @model({
     settings: {
@@ -26,6 +27,12 @@ import { Period } from './period.model'
                 entity: 'Period',
                 entityKey: 'id',
                 foreignKey: 'periodid'
+            },
+            fkReservationSurgeryroom: {
+                name: 'fk_reservation_surgery_room',
+                entity: 'Surgeryroom',
+                entityKey: 'id',
+                foreignKey: 'surgeryroomid'
             }
         }
     }
@@ -59,6 +66,9 @@ export class Reservation extends MyModel {
 
     @belongsTo(() => Period)
     periodId: number
+
+    @belongsTo(() => Surgeryroom)
+    surgeryroomId: number
 
     constructor(data?: Partial<Reservation>) {
         super(data)

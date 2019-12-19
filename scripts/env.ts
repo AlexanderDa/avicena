@@ -71,7 +71,6 @@ export async function createEF(): Promise<void> {
                     message: 'create image folder?'
                 }
                 const confirm = await Prompt(questions)
-                console.log(IMGPATH, confirm)
 
                 if (confirm.images) {
                     mkdirSync(IMGPATH, { recursive: true })
