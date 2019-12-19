@@ -13,6 +13,7 @@ export default class MainAdminPage extends Vue {
     { title: 'Usuarios', icon: 'supervisor_account', routerName: 'UserAdminPage' },
     { title: 'Periodos', icon: 'calendar_today', routerName: 'PeriodAdminPage' },
     { title: 'Profesionales', icon: 'work', routerName: 'ProfessionalAdminPage' },
+    { title: 'Quirófano', icon: 'work', routerName: 'SurgeryRoomAdminPage' },
     { title: 'Honorarios', icon: 'monetization_on', routerName: 'HonoraryAdminPage' }
   ]
 }

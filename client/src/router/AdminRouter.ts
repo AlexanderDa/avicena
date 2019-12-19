@@ -25,7 +25,13 @@ const AdminRouter: RouteConfig = {
       path: 'profesionales',
       name: 'ProfessionalAdminPage',
       component: () => import('@/views/admin/professional/ProfessionalAdminPage.vue')
+    },
+    {
+      path: 'quirofano',
+      name: 'SurgeryRoomAdminPage',
+      component: () => import('@/views/admin/surgeryroom/SurgeryroomAdminPage.vue')
     }
+
   ]
 }
 export default AdminRouter
