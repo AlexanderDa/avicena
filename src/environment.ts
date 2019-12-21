@@ -1,14 +1,34 @@
 import { resolve } from 'path'
 import { existsSync } from 'fs'
 import { readFileSync } from 'fs'
-import { environment } from '../scripts/env'
+import { AppConfig } from '../scripts/env'
 
 export function init() {
     const CONFIGPATH = resolve(__dirname, '../../app.config.json')
-    let config: environment = {}
+    //    let config: AppConfig = {}
     if (existsSync(CONFIGPATH)) {
         try {
-            config = JSON.parse(readFileSync(CONFIGPATH).toString())
+            const config: AppConfig = JSON.parse(
+                readFileSync(CONFIGPATH).toString()
+            )
+
+            // Application URL
+            process.env.BASE_URL = config.domain
+
+            // Postgresql URL
+            process.env.DBPG_BASE_URL = config.db
+
+            // Token credentials
+            process.env.TOKEN_SECRET = config.jwt.key
+            process.env.TOKEN_EXPIRES = String(config.jwt.expires)
+
+            // Upload path
+            process.env.LOADING_ROUTE = config.loading
+
+            // Email credentials
+            process.env.EMAIL_HOST = config.email.host
+            process.env.EMAIL_ADDRESS = config.email.account
+            process.env.EMAIL_PASSWORD = config.email.password
         } catch (error) {
             console.error(error)
         }
@@ -17,17 +37,4 @@ export function init() {
             `\x1b[31m${CONFIGPATH} doesn't exist, try npm run cli\x1b[0m`
         )
     }
-
-    // Application URL
-    process.env.BASE_URL = config.domain
-
-    // Postgresql URL
-    process.env.DBPG_BASE_URL = config.db
-
-    // Token credentials
-    process.env.TOKEN_SECRET = config.jwtKey
-    process.env.TOKEN_EXPIRES = String(config.jwtExpires)
-
-    // Upload path
-    process.env.LOADING_ROUTE = config.loading
 }
