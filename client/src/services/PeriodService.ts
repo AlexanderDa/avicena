@@ -56,7 +56,6 @@ export default class PeriodService extends Vue implements Service<PeriodModel> {
 
   formBody (element: PeriodModel): PeriodModel {
     let period:PeriodModel = new PeriodModel()
-    console.log(element)
     period.startDate = new Date(element.startDate || '')
     period.finishDate = new Date(element.finishDate || '')
     period.label = element.label

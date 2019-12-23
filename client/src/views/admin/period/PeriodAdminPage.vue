@@ -23,10 +23,10 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn color="primary" dark icon @click="findElements()">
+          <v-btn color="secondary" dark icon @click="findElements()">
             <v-icon>refresh</v-icon>
           </v-btn>
-          <v-btn color="primary" dark icon @click="dialog=!dialog">
+          <v-btn color="secondary" dark icon @click="dialog=!dialog">
             <v-icon>add</v-icon>
           </v-btn>
         </v-toolbar>
@@ -41,9 +41,6 @@
           <v-icon>edit</v-icon>
         </v-btn>
         <Delete @onDelete="deleteElement(item)" />
-      </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="findElements">Reset</v-btn>
       </template>
     </v-data-table>
 

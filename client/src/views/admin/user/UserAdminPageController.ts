@@ -59,7 +59,6 @@ export default class UserAdminPage extends Vue
   ********************************************************/
 
   createElement (): void {
-    console.log(this.imageFile)
     const service: UserService = new UserService()
     service.create(this.element)
       .then((element: UserModel) => {
@@ -94,7 +93,6 @@ export default class UserAdminPage extends Vue
 
   updateElement (): void {
     const service: UserService = new UserService()
-    console.log(this.imageFile)
     service.updateById(this.element)
       .then(async () => {
         if (this.imageFile !== null) {
