@@ -12,7 +12,7 @@ export class ProfessionalSpect extends Spect {
                 'application/json': {
                     schema: getModelSchemaRef(Professional, {
                         title: 'NewProfessional',
-                        exclude: ['createdBy', 'createdAt', 'id']
+                        exclude: ['createdBy', 'createdAt', 'id', 'image']
                     })
                 }
             }
@@ -42,7 +42,7 @@ export class ProfessionalSpect extends Spect {
                 'application/json': {
                     schema: getModelSchemaRef(Professional, {
                         title: 'UpdateProfessional',
-                        exclude: ['createdBy', 'createdAt']
+                        exclude: ['createdBy', 'createdAt', 'image']
                     })
                 }
             }
@@ -56,7 +56,7 @@ export class ProfessionalSpect extends Spect {
                     schema: getModelSchemaRef(Professional, {
                         title: 'PartialProfessional',
                         partial: true,
-                        exclude: ['createdBy', 'createdAt']
+                        exclude: ['createdBy', 'createdAt', 'image']
                     })
                 }
             }

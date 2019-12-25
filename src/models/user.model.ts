@@ -81,16 +81,6 @@ export class User extends MyModel {
 
     @property({
         type: 'string',
-        length: 75,
-        postgresql: {
-            dataType: 'character varying',
-            dataLength: 75
-        }
-    })
-    image?: string
-
-    @property({
-        type: 'string',
         length: 10,
         postgresql: {
             dataType: 'character varying',

@@ -1,9 +1,14 @@
+import * as multer from 'multer'
 import { inject } from '@loopback/context'
 import { Count } from '@loopback/repository'
 import { Filter } from '@loopback/repository'
 import { repository } from '@loopback/repository'
 import { Where } from '@loopback/repository'
-import { post, HttpErrors } from '@loopback/rest'
+import { post } from '@loopback/rest'
+import { HttpErrors } from '@loopback/rest'
+import { RestBindings } from '@loopback/rest'
+import { Request } from '@loopback/rest'
+import { Response } from '@loopback/rest'
 import { param } from '@loopback/rest'
 import { get } from '@loopback/rest'
 import { getFilterSchemaFor } from '@loopback/rest'
@@ -18,13 +23,17 @@ import { ProfessionalSpect } from './specs/professional.spect'
 import { authenticate } from '@loopback/authentication'
 import { SecurityBindings, UserProfile } from '@loopback/security'
 import { AuditTable, AuditService } from '../services/audit.service'
-import { AuditBindings, AccountBindings } from '../keys'
+import { AuditBindings, AccountBindings, FileBindings } from '../keys'
 import { AccountService } from '../services/account.service'
+import FileSpects from './specs/file.spect'
+import { FileService } from '../services/file.service'
 
 export class ProfessionalController {
     constructor(
         @repository(ProfessionalRepository)
         public professionalRepository: ProfessionalRepository,
+        @inject(FileBindings.FILE_SERVICE)
+        public fileService: FileService,
         @inject(AccountBindings.ACCOUNT_SERVICE)
         public acountService: AccountService,
         @inject(AuditBindings.AUDIT_SERVICE)
@@ -38,6 +47,50 @@ export class ProfessionalController {
         professional: Omit<Professional, 'id'>
     ): Promise<Professional> {
         return this.professionalRepository.create(professional)
+    }
+
+    @post('/api/professional/{id}/avatar', new FileSpects().created())
+    @authenticate('jwt')
+    async createAvatar(
+        @inject(SecurityBindings.USER) profile: UserProfile,
+        @param.path.number('id') id: number,
+        @requestBody(new FileSpects().create()) req: Request,
+        @inject(RestBindings.Http.RESPONSE) res: Response
+    ): Promise<object> {
+        const storage = this.fileService.imageStorage(req, res)
+        const upload = multer({ storage })
+        return new Promise<object>((resolve, reject) => {
+            // eslint-disable-next-line
+            upload.any()(req, res, async err => {
+                if (err) reject(err)
+                else {
+                    const professional: Professional = await this.professionalRepository.findById(
+                        id
+                    )
+                    let image = ''
+                    // eslint-disable-next-line
+                    const files: any = req.files
+                    // eslint-disable-next-line
+                    files.forEach(async (element: any) => {
+                        const oldImage: URL | undefined = professional.image
+                            ? new URL(professional.image)
+                            : undefined
+                        image = `${process.env.BASE_URL}/file/image/${element.filename}`
+                        await this.professionalRepository.updateById(
+                            professional.id,
+                            {
+                                image: image
+                            }
+                        )
+                        if (oldImage) this.fileService.deleteFile(oldImage)
+                    })
+
+                    resolve({
+                        url: image
+                    })
+                }
+            })
+        })
     }
 
     @get('/api/professionals/count', new ProfessionalSpect().count())

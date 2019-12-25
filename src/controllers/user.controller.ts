@@ -3,11 +3,8 @@ import { Count } from '@loopback/repository'
 import { Filter } from '@loopback/repository'
 import { repository } from '@loopback/repository'
 import { Where } from '@loopback/repository'
-import { Request } from '@loopback/rest'
-import { Response } from '@loopback/rest'
 import { post } from '@loopback/rest'
 import { HttpErrors } from '@loopback/rest'
-import { RestBindings } from '@loopback/rest'
 import { param } from '@loopback/rest'
 import { get } from '@loopback/rest'
 import { getFilterSchemaFor } from '@loopback/rest'
@@ -31,13 +28,13 @@ import { AccountService } from '../services/account.service'
 import { AuditService } from '../services/audit.service'
 import { AuditTable } from '../services/audit.service'
 import { FileService } from '../services/file.service'
-import AccountSpects from './specs/account.spect'
-import * as multer from 'multer'
 
 export class UserController {
     constructor(
-        @repository(UserRepository) public userRepository: UserRepository,
-        @inject(FileBindings.FILE_SERVICE) public fileService: FileService,
+        @repository(UserRepository)
+        public userRepository: UserRepository,
+        @inject(FileBindings.FILE_SERVICE)
+        public fileService: FileService,
         @inject(PasswordHasherBindings.PASSWORD_HASHER)
         public passwordHasher: PasswordHasher,
         @inject(AccountBindings.ACCOUNT_SERVICE)
@@ -155,12 +152,6 @@ export class UserController {
         @param.path.number('id') id: number
     ): Promise<void> {
         try {
-            const user: User = await this.userRepository.findById(id)
-
-            const oldImage: URL | undefined = user.image
-                ? new URL(user.image)
-                : undefined
-            if (oldImage) this.fileService.deleteFile(oldImage)
             await this.userRepository.deleteById(id)
 
             await this.auditService.auditDeleted(
@@ -173,44 +164,5 @@ export class UserController {
                 throw new HttpErrors.Conflict('REFERENCED')
             else throw err
         }
-    }
-
-    @post('/api/user/{id}/avatar', new AccountSpects().newAvatar())
-    @authenticate('jwt')
-    async createAvatar(
-        @inject(SecurityBindings.USER) profile: UserProfile,
-        @param.path.number('id') id: number,
-        @requestBody(new AccountSpects().newFile()) req: Request,
-        @inject(RestBindings.Http.RESPONSE) res: Response
-    ): Promise<object> {
-        const storage = this.fileService.imageStorage(req, res)
-        const upload = multer({ storage })
-        return new Promise<object>((resolve, reject) => {
-            // eslint-disable-next-line
-            upload.any()(req, res, async err => {
-                if (err) reject(err)
-                else {
-                    const user: User = await this.userRepository.findById(id)
-                    let image = ''
-                    // eslint-disable-next-line
-                    const files: any = req.files
-                    // eslint-disable-next-line
-                    files.forEach(async (element: any) => {
-                        const oldImage: URL | undefined = user.image
-                            ? new URL(user.image)
-                            : undefined
-                        image = `${process.env.BASE_URL}/file/image/${element.filename}`
-                        await this.userRepository.updateById(user.id, {
-                            image: image
-                        })
-                        if (oldImage) this.fileService.deleteFile(oldImage)
-                    })
-
-                    resolve({
-                        url: image
-                    })
-                }
-            })
-        })
     }
 }
