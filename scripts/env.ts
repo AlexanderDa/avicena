@@ -2,122 +2,106 @@ import { url as pgUrl } from '../src/datasources/pgconfig.datasource.config.json
 import { resolve } from 'path'
 import { existsSync, mkdirSync } from 'fs'
 import { writeFileSync } from 'fs'
-import { readFileSync } from 'fs'
 import { prompt as Prompt } from 'inquirer'
 import { QuestionCollection } from 'inquirer'
-const CONFIGPATH: string = resolve(__dirname, '../../app.config.json')
-
-export interface EmailConfig {
-    host: string
-    account: string
-    password: string
-}
-
-export interface JwtConfig {
-    key: string
-    expires: number
-}
-
-export interface AppConfig {
-    domain: string
-    db: string
-    loading: string
-    jwt: JwtConfig
-    email: EmailConfig
-}
-
-// eslint-disable-next-line
-interface inquirerResponses {
-    domain?: string
-    db?: string
-    loading?: string
-    jwtExpires?: number
-    jwtKey?: string
-    emailHost?: string
-    emailAddress?: string
-    emailPassword?: string
-}
-
-export async function getConfig(): Promise<inquirerResponses> {
-    let config: inquirerResponses = {}
-    if (existsSync(CONFIGPATH)) {
-        try {
-            config = JSON.parse(readFileSync(CONFIGPATH).toString())
-        } catch (error) {
-            console.error()
-        }
-    }
-    return config
-}
+const CONFIGPATH: string = resolve('./.env')
 
 export async function createCF(): Promise<void> {
-    const config: inquirerResponses = await getConfig()
     await Prompt([
+        {
+            name: 'env',
+            message: 'Environment',
+            default: process.env.NODE_ENV || 'development'
+        },
+        {
+            name: 'host',
+            message: 'Host',
+            default: process.env.HOST || '127.0.0.1'
+        },
+        {
+            name: 'port',
+            message: 'Port',
+            default: process.env.PORT || 3000
+        },
         {
             name: 'domain',
             message: 'Domain',
-            default: config.domain ? config.domain : 'http://localhost:3000'
+            default: process.env.BASE_URL || 'http://127.0.0.1:3000'
         },
         {
             name: 'db',
             message: 'Database ',
-            default: config.db ? config.db : pgUrl
+            default: process.env.DBPG_BASE_URL || pgUrl
         },
         {
             name: 'loading',
             message: 'Loadin path ',
-            default: config.loading
-                ? config.loading
-                : resolve(__dirname, '../../uploads')
+            default: process.env.LOADING_ROUTE || resolve('./uploads')
         },
         {
             name: 'jwtExpires',
             message: 'Session expires in ',
-            default: config.jwtExpires ? config.jwtExpires : 3600
+            default: process.env.TOKEN_EXPIRES || 3600
         },
         {
             name: 'jwtKey',
             message: 'Session secret key ',
             type: 'password',
-            default: config.jwtKey ? config.jwtKey : 'myjwts3cr3t'
+            default: process.env.TOKEN_SECRET || 'myjwts3cr3t'
         },
         {
             name: 'emailHost',
             message: 'Email host',
-            default: config.emailHost ? config.emailHost : 'smtp.office365.com'
+            default: process.env.EMAIL_HOST || 'smtp.office365.com'
         },
         {
             name: 'emailAddress',
             message: 'Email account',
-            default: config.emailAddress
-                ? config.emailAddress
-                : 'example@example.com'
+            default: process.env.EMAIL_ADDRESS || 'example@example.com'
         },
         {
             name: 'emailPassword',
             message: 'Email password',
             type: 'password',
-            default: config.emailPassword
-                ? config.emailPassword
-                : 'myemails3cr3t'
+            default: process.env.EMAIL_PASSWORD || 'myemails3cr3t'
         }
     ])
         .then(async result => {
-            const appConfig: AppConfig = {
-                domain: result.domain,
-                db: result.db,
-                loading: result.loading,
-                jwt: {
-                    expires: result.jwtExpires,
-                    key: result.jwtKey
-                },
-                email: {
-                    host: result.emailHost,
-                    account: result.emailAddress,
-                    password: result.emailPassword
-                }
-            }
-            writeFileSync(CONFIGPATH, JSON.stringify(appConfig, null, '\t'))
+            const env = `
+# Server information
+NODE_ENV = ${result.env}
+HOST = ${result.host}
+PORT = ${result.port}
+BASE_URL = ${result.domain}
+
+# Postgresql URL
+DBPG_BASE_URL = ${result.db}
+
+# Token credentials
+TOKEN_SECRET = ${result.jwtKey}
+TOKEN_EXPIRES = ${result.jwtExpires}
+
+# Upload path
+LOADING_ROUTE = ${result.loading}
+
+# Email credentials
+EMAIL_HOST = ${result.emailHost}
+EMAIL_ADDRESS = ${result.emailAddress}
+EMAIL_PASSWORD = ${result.emailPassword}
+`
+            process.env.NODE_ENV = result.env
+            process.env.HOST = result.host
+            process.env.PORT = result.port
+            process.env.BASE_URL = result.domain
+            process.env.DBPG_BASE_URL = result.db
+            process.env.TOKEN_SECRET = result.jwtKey
+            process.env.TOKEN_EXPIRES = result.jwtExpires
+            process.env.LOADING_ROUTE = result.loading
+            process.env.EMAIL_HOST = result.emailHost
+            process.env.EMAIL_ADDRESS = result.emailAddress
+            process.env.EMAIL_PASSWORD = result.emailPassword
+
+            writeFileSync(CONFIGPATH, env)
             if (!existsSync(result.loading)) {
                 const IMGPATH = resolve(result.loading, 'images')
                 const questions: QuestionCollection = {

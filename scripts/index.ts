@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
 import { prompt as Prompt } from 'inquirer'
 import { QuestionCollection } from 'inquirer'
 import { createCF } from './env'

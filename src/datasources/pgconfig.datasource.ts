@@ -5,8 +5,6 @@ import { ValueOrPromise } from '@loopback/core'
 import { juggler } from '@loopback/repository'
 import { name as DBPG_NAME } from './pgconfig.datasource.config.json'
 import { connector as DBPG_CONNECTOR } from './pgconfig.datasource.config.json'
-import { init } from '../environment'
-init()
 
 const pgConfig: object = {
     name: DBPG_NAME,
