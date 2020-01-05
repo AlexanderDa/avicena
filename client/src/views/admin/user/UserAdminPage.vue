@@ -30,12 +30,6 @@
           </v-btn>
         </v-toolbar>
       </template>
-      <template v-slot:item.image="{ item }">
-        <v-avatar color="grey">
-          <v-img v-if="item.image" :src="item.image" />
-          <v-icon v-else large dark>account_circle</v-icon>
-        </v-avatar>
-      </template>
       <template v-slot:item.status="{ item }">
          <v-chip :color="(item.isActive)?'success':'error'" dark>{{ (item.isActive)?'Activo':'Inactivo' }}</v-chip>
       </template>

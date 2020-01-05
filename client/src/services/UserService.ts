@@ -15,21 +15,6 @@ export default class UserService extends Vue implements Service<UserModel> {
     return user
   }
 
-  async avatar (id: number, data: FormData): Promise<string> {
-    let url: string = ''
-    try {
-      const res: any = await this.$http.post(`/api/user/${id}/avatar`, data, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-      url = res.body.url
-    } catch (err) {
-      throw err
-    }
-    return url
-  }
-
   count (): Promise<number> {
     throw new Error('Method not implemented.')
   }
@@ -46,8 +31,16 @@ export default class UserService extends Vue implements Service<UserModel> {
     return list
   }
 
-  findById (id: number): Promise<UserModel> {
-    throw new Error('Method not implemented.')
+  async findById (id: number): Promise<UserModel> {
+    let user: UserModel
+
+    try {
+      const res: any = await this.$http.get(`/api/user/${id}`)
+      user = res.body
+    } catch (err) {
+      throw err
+    }
+    return user
   }
 
   async updateById (element: UserModel): Promise<boolean> {

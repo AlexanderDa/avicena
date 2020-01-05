@@ -14,6 +14,22 @@ export default class ProfessionalService extends Vue implements Service<Professi
     }
     return professional
   }
+
+  async avatar (id: number, data: FormData): Promise<string> {
+    let url: string = ''
+    try {
+      const res: any = await this.$http.post(`/api/user/${id}/avatar`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      url = res.body.url
+    } catch (err) {
+      throw err
+    }
+    return url
+  }
+
   count (): Promise<number> {
     throw new Error('Method not implemented.')
   }
