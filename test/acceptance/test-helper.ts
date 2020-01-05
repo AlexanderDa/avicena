@@ -1,4 +1,6 @@
-import { Main } from '../../src'
+import * as dotenv from 'dotenv'
+dotenv.config()
+import { Main } from '../../src/application'
 import { createRestAppClient } from '@loopback/testlab'
 import { givenHttpServerConfig } from '@loopback/testlab'
 import { Client } from '@loopback/testlab'

@@ -7,11 +7,13 @@ import AdminRouter from '@/router/AdminRouter'
 import MedicoRouter from '@/router/MedicoRouter'
 import AuthenticationRouter from '@/router/AuthenticationRouter'
 import UserModel from '@/models/UserModel'
+import NotFoundRouter from '@/router/NotFoundRouter'
 import { Roles } from '@/common'
 
 Vue.use(VueRouter)
 
 const routes: RouteConfig[] = [
+  NotFoundRouter,
   AuthenticationRouter,
   LoginRouter,
   AccoutnRouter,

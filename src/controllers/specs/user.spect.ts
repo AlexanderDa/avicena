@@ -19,8 +19,7 @@ export class UserSpect extends Spect {
                             'isActive',
                             'password',
                             'passwordResetToken',
-                            'passwordResetTokenDate',
-                            'image'
+                            'passwordResetTokenDate'
                         ]
                     })
                 }

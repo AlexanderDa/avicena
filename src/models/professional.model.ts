@@ -116,6 +116,16 @@ export class Professional extends MyModel {
     })
     isHired: boolean
 
+    @property({
+        type: 'string',
+        length: 75,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 75
+        }
+    })
+    image?: string
+
     @belongsTo(() => User)
     userId: number
 

@@ -1,6 +1,8 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
 import { prompt as Prompt } from 'inquirer'
 import { QuestionCollection } from 'inquirer'
-import { createEF } from './env'
+import { createCF } from './env'
 import { migrate } from './migrate'
 
 class Script {
@@ -21,15 +23,15 @@ class Script {
             name: 'option',
             message: 'What would you like to do?',
             choices: [
-                { value: 'createEF', name: 'Create variables file' },
+                { value: 'createCF', name: 'Create config file' },
                 { value: 'migrate', name: 'Migrate the database' },
                 { value: 'exit', name: 'Exit' }
             ]
         }
         const prompt = await Prompt(questions)
         switch (prompt.option) {
-            case 'createEF':
-                await createEF()
+            case 'createCF':
+                await createCF()
                 break
             case 'migrate':
                 await this.migrate()

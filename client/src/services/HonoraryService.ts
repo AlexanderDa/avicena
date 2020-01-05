@@ -55,7 +55,6 @@ export default class HonoraryService extends Vue implements Service<HonoraryMode
   }
 
   formBody (element: HonoraryModel): HonoraryModel {
-    console.log(element)
     let honorary: HonoraryModel = new HonoraryModel()
     honorary.description = element.description
     honorary.value = Number(element.value)

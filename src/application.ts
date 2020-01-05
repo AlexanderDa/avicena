@@ -11,6 +11,7 @@ import { MySequence } from './sequence'
 import { AuthenticationComponent } from '@loopback/authentication'
 import { registerAuthenticationStrategy } from '@loopback/authentication'
 import { TokenBindings } from './keys'
+import { EmailBindings } from './keys'
 import { FileBindings } from './keys'
 import { PasswordHasherBindings } from './keys'
 import { AccountBindings } from './keys'
@@ -26,6 +27,7 @@ import { JWTAuthenticationStrategy } from './authstrategies/jwt.strategy'
 import { MyFileService } from './services/file.service'
 import { AppInfo } from '../common/AppInfo'
 import { appInfo } from '../common/AppInfo'
+import { MyEmailService } from './services/email.service'
 
 /**
  * Information from package.json
@@ -62,7 +64,7 @@ export class Main extends BootMixin(
         this.sequence(MySequence)
 
         // Set up default home page
-        this.static('/', join(__dirname, '../../public'))
+        this.static('/', join(__dirname, '../../public/client'))
 
         // Set image route
         this.static(
@@ -112,6 +114,9 @@ export class Main extends BootMixin(
 
         // Account serices
         this.bind(AccountBindings.ACCOUNT_SERVICE).toClass(MyAccountService)
+
+        // Mail service
+        this.bind(EmailBindings.EMAIL_SERVICE).toClass(MyEmailService)
 
         // Audit service
         this.bind(AuditBindings.AUDIT_SERVICE).toClass(MyAuditService)

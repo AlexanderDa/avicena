@@ -45,7 +45,6 @@ export default class UserAdminPage extends Vue
   }
   initHeader (): void {
     this.headers = [
-      { text: 'Imagen', value: 'image', align: 'center', sortable: false },
       { text: 'Usuario', value: 'username' },
       { text: 'Correo', value: 'emailAddress' },
       { text: 'Estado', value: 'status', align: 'center' },
@@ -59,8 +58,7 @@ export default class UserAdminPage extends Vue
   ********************************************************/
 
   createElement (): void {
-    console.log(this.imageFile)
-    const service: UserService = new UserService()
+    /* const service: UserService = new UserService()
     service.create(this.element)
       .then((element: UserModel) => {
         if (this.imageFile !== null) {
@@ -75,6 +73,7 @@ export default class UserAdminPage extends Vue
         this.notyfy.success('Usuario creado')
       })
       .catch((err) => { errorService(err) })
+      */
   }
 
   findElements (): void {
@@ -93,8 +92,7 @@ export default class UserAdminPage extends Vue
   }
 
   updateElement (): void {
-    const service: UserService = new UserService()
-    console.log(this.imageFile)
+    /* const service: UserService = new UserService()
     service.updateById(this.element)
       .then(async () => {
         if (this.imageFile !== null) {
@@ -109,6 +107,7 @@ export default class UserAdminPage extends Vue
         this.notyfy.success('Usuario actualizado')
       })
       .catch((err) => { errorService(err) })
+      */
   }
 
   deleteElement (element: UserModel): void {

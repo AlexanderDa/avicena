@@ -7,6 +7,7 @@ import { Credentials } from '../common/Credentials'
 import { AccountService } from './services/account.service'
 import { AuditService } from './services/audit.service'
 import { FileService } from './services/file.service'
+import { EmailService } from './services/email.service'
 
 // Send Mail
 // https://stackoverflow.com/questions/57182231/send-email-with-loopback-4
@@ -39,6 +40,12 @@ export namespace UserBindings {
 export namespace AccountBindings {
     export const ACCOUNT_SERVICE = BindingKey.create<AccountService>(
         'services.account.service'
+    )
+}
+
+export namespace EmailBindings {
+    export const EMAIL_SERVICE = BindingKey.create<EmailService>(
+        'services.email.service'
     )
 }
 

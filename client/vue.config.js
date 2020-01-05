@@ -1,6 +1,6 @@
 module.exports = {
   transpileDependencies: ['vuetify', 'vuejs-dialog'],
-  outputDir: '../public',
+  outputDir: '../public/client',
   devServer: {
     proxy: {
       '/api': {

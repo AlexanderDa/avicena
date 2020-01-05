@@ -63,6 +63,9 @@ typings/
 # Cache used by TypeScript's incremental build
 *.tsbuildinfo
 
+# Client built
+public/client
+
 # Upload dir
 .uploads
 uploads

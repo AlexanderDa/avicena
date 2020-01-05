@@ -22,19 +22,13 @@
             clearable
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn color="primary" dark icon @click="findElements()">
+          <v-btn color="secondary" dark icon @click="findElements()">
             <v-icon>refresh</v-icon>
           </v-btn>
-          <v-btn color="primary" icon @click="dialog=true">
+          <v-btn color="secondary" icon @click="dialog=true">
             <v-icon>add</v-icon>
           </v-btn>
         </v-toolbar>
-      </template>
-      <template v-slot:item.image="{ item }">
-        <v-avatar color="grey">
-          <v-img v-if="item.image" :src="item.image" />
-          <v-icon v-else large dark>account_circle</v-icon>
-        </v-avatar>
       </template>
       <template v-slot:item.status="{ item }">
          <v-chip :color="(item.isActive)?'success':'error'" dark>{{ (item.isActive)?'Activo':'Inactivo' }}</v-chip>
@@ -45,9 +39,6 @@
       <template v-slot:item.action="{ item }">
         <v-icon @click="toEditElement(item)">edit</v-icon>
         <Delete @onDelete="deleteElement(item)" />
-      </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="findElements">Reset</v-btn>
       </template>
     </v-data-table>
 

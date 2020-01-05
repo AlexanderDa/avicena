@@ -2,7 +2,6 @@
   <div id="app">
     <v-app id="inspire">
       <v-app-bar app color="primary" dark clipped-left>
-        <img src="@/assets/logo.svg" width="50px" />
         <v-toolbar-title>{{app.name.charAt(0).toUpperCase() + app.name.slice(1)}}</v-toolbar-title>
         <v-spacer />
         <v-btn dark icon @click="$router.back()">

@@ -1,6 +1,5 @@
 import { OperationObject } from '@loopback/rest'
 import { RequestBodyObject } from '@loopback/rest'
-import { OPERATION_SECURITY_SPEC } from '../../utils/security.spec'
 
 export default class AccountSpects {
     logged(): OperationObject {
@@ -65,40 +64,6 @@ export default class AccountSpects {
                             }
                         }
                     }
-                }
-            }
-        }
-    }
-
-    newAvatar(): OperationObject {
-        return {
-            security: OPERATION_SECURITY_SPEC,
-            responses: {
-                200: {
-                    content: {
-                        'application/json': {
-                            schema: {
-                                properties: {
-                                    url: {
-                                        type: 'string'
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    newFile(): RequestBodyObject {
-        return {
-            description: 'User avatar.',
-            required: true,
-            content: {
-                'multipart/form-data': {
-                    // Skip body parsing
-                    'x-parser': 'stream'
                 }
             }
         }

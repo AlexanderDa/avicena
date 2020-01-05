@@ -9,14 +9,9 @@
                             <form @submit.prevent="login()">
                                 <v-card-text>
                                     <div class="layout column align-center">
-                                        <img
-                                            src="@/assets/logo.svg"
-                                            alt="Bamboo"
-                                            width="120"
-                                            height="120"
-                                        />
+                                        <img src="@/assets/logo.svg" width="180" />
                                         <h1
-                                            class="flex my-4 primary--text"
+                                            class="flex my-4 primary--text pt-5"
                                         >{{app.name.charAt(0).toUpperCase() + app.name.slice(1)}}</h1>
                                     </div>
 
@@ -30,7 +25,6 @@
                                     ></v-text-field>
                                     <v-text-field
                                         color="primary"
-
                                         label="Contraseña"
                                         :append-icon="showPass ? 'visibility' : 'visibility_off'"
                                         @click:append="() => (showPass = !showPass)"
