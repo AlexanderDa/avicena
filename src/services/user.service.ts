@@ -22,6 +22,9 @@ export class MyUserService implements UserService<User, Credentials> {
             where: { emailAddress: credentials.email.toLowerCase() }
         })
         if (!result) throw new HttpErrors.Unauthorized('BAD_ACCOUNT')
+        if (!result.confirmed) throw new HttpErrors.Unauthorized('INACTIVE_ACCOUNT')
+
+
 
         const user: User = new User(result || undefined)
 

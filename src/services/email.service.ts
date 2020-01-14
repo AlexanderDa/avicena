@@ -4,7 +4,11 @@ import { renderFile } from 'ejs'
 import { appInfo } from '../../common/AppInfo'
 
 export interface EmailService {
-    welcome(name: string, email: string, password: string): Promise<void>
+    welcome(
+        name: string,
+        email: string,
+        confirmationCode: string
+    ): Promise<void>
 }
 
 export class MyEmailService implements EmailService {
@@ -24,7 +28,7 @@ export class MyEmailService implements EmailService {
     async welcome(
         name: string,
         email: string,
-        password: string
+        confirmationCode: string
     ): Promise<void> {
         const mailOptions = {
             from: `${appInfo.name} <${process.env.EMAIL_ADDRESS}>`,
@@ -35,7 +39,11 @@ export class MyEmailService implements EmailService {
                 {
                     appUrl: process.env.BASE_URL,
                     name: name,
-                    password: password
+                    query: JSON.stringify({
+                        userName: name,
+                        activationCode: confirmationCode,
+                        emailAddress: email
+                    })
                 }
             )
         }

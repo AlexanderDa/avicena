@@ -2,16 +2,16 @@ import { model } from '@loopback/repository'
 import { belongsTo } from '@loopback/repository'
 import { property } from '@loopback/repository'
 import { MyModel } from '.'
-import { Professional } from './professional.model'
+import { Personal } from './personal.model'
 
 @model({
     settings: {
         foreignKeys: {
-            fkDoctorProfessional: {
-                name: 'fk_doctor_professional',
-                entity: 'Professional',
+            fkDoctorPersonal: {
+                name: 'fk_doctor_personal',
+                entity: 'Personal',
                 entityKey: 'id',
-                foreignKey: 'professionalid'
+                foreignKey: 'personalid'
             }
         }
     }
@@ -24,8 +24,8 @@ export class Doctor extends MyModel {
     })
     id?: number
 
-    @belongsTo(() => Professional)
-    professionalId: number
+    @belongsTo(() => Personal)
+    personalId: number
 
     constructor(data?: Partial<Doctor>) {
         super(data)

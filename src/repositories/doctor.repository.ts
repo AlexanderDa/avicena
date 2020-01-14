@@ -3,34 +3,34 @@ import { repository } from '@loopback/repository'
 import { BelongsToAccessor } from '@loopback/repository'
 import { Doctor } from '../models'
 import { DoctorRelations } from '../models'
-import { Professional } from '../models'
+import { Personal } from '../models'
 import { PgconfigDataSource } from '../datasources'
 import { inject, Getter } from '@loopback/core'
-import { ProfessionalRepository } from './professional.repository'
+import { PersonalRepository } from './personal.repository'
 
 export class DoctorRepository extends DefaultCrudRepository<
     Doctor,
     typeof Doctor.prototype.id,
     DoctorRelations
 > {
-    public readonly professional: BelongsToAccessor<
-        Professional,
+    public readonly personal: BelongsToAccessor<
+        Personal,
         typeof Doctor.prototype.id
     >
 
     constructor(
         @inject('datasources.pgconfig') dataSource: PgconfigDataSource,
-        @repository.getter('ProfessionalRepository')
-        protected professionalRepositoryGetter: Getter<ProfessionalRepository>
+        @repository.getter('PersonalRepository')
+        protected personalRepositoryGetter: Getter<PersonalRepository>
     ) {
         super(Doctor, dataSource)
-        this.professional = this.createBelongsToAccessorFor(
-            'professional',
-            professionalRepositoryGetter
+        this.personal = this.createBelongsToAccessorFor(
+            'personal',
+            personalRepositoryGetter
         )
         this.registerInclusionResolver(
-            'professional',
-            this.professional.inclusionResolver
+            'personal',
+            this.personal.inclusionResolver
         )
     }
 }

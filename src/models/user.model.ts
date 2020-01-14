@@ -25,8 +25,8 @@ import { Role } from './role.model'
                 keys: { emailAddress: 1 },
                 options: { unique: true }
             },
-            uniqueUserName: {
-                keys: { username: 1 },
+            uniqueConfirmationCode: {
+                keys: { confirmationCode: 1 },
                 options: { unique: true }
             }
         }
@@ -39,17 +39,6 @@ export class User extends MyModel {
         generated: true
     })
     id?: number
-
-    @property({
-        type: 'string',
-        required: true,
-        length: 40,
-        postgresql: {
-            dataType: 'character varying',
-            dataLength: 40
-        }
-    })
-    username: string
 
     @property({
         type: 'string',
@@ -72,6 +61,23 @@ export class User extends MyModel {
         }
     })
     password: string
+
+    @property({
+        type: 'boolean',
+        default: false
+    })
+    confirmed?: boolean
+
+    @property({
+        type: 'string',
+        required: false,
+        length: 20,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 20
+        }
+    })
+    confirmationCode: string
 
     @property({
         type: 'boolean',

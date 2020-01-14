@@ -16,11 +16,12 @@ export class UserSpect extends Spect {
                             'createdBy',
                             'createdAt',
                             'id',
-                            'isActive',
+                            'image',
                             'password',
+                            'confirmed',
+                            'confirmationCode',
                             'passwordResetToken',
-                            'passwordResetTokenDate',
-                            'image'
+                            'passwordResetTokenDate'
                         ]
                     })
                 }
@@ -40,6 +41,7 @@ export class UserSpect extends Spect {
                                 title: 'CreatedUser',
                                 exclude: [
                                     'password',
+                                    'confirmationCode',
                                     'passwordResetToken',
                                     'passwordResetTokenDate'
                                 ]
@@ -61,6 +63,9 @@ export class UserSpect extends Spect {
                             'createdBy',
                             'createdAt',
                             'password',
+                            'image',
+                            'confirmed',
+                            'confirmationCode',
                             'passwordResetToken',
                             'passwordResetTokenDate'
                         ]
@@ -81,6 +86,9 @@ export class UserSpect extends Spect {
                             'createdBy',
                             'createdAt',
                             'password',
+                            'image',
+                            'confirmed',
+                            'confirmationCode',
                             'passwordResetToken',
                             'passwordResetTokenDate'
                         ]

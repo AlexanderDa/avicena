@@ -1,13 +1,9 @@
 import { inject } from '@loopback/context'
-import * as multer from 'multer'
 import { UserRepository } from '../repositories'
 import { repository } from '@loopback/repository'
-import { post, put, param } from '@loopback/rest'
-import { RestBindings } from '@loopback/rest'
+import { post, put, param, HttpErrors } from '@loopback/rest'
 import { get } from '@loopback/rest'
 import { requestBody } from '@loopback/rest'
-import { Request } from '@loopback/rest'
-import { Response } from '@loopback/rest'
 import { User } from '../models'
 import { authenticate } from '@loopback/authentication'
 import { TokenService } from '@loopback/authentication'
@@ -97,44 +93,33 @@ export class AccountController {
         return { updated: true }
     }
 
-    @post('/api/account/avatar', new AccountSpects().newAvatar())
-    @authenticate('jwt')
-    async createAvatar(
-        @inject(SecurityBindings.USER) profile: UserProfile,
-        @requestBody(new AccountSpects().newFile())
-        req: Request,
-        @inject(RestBindings.Http.RESPONSE) res: Response
-    ): Promise<object> {
-        const storage = this.fileService.imageStorage(req, res)
-        const upload = multer({ storage })
-        return new Promise<object>((resolve, reject) => {
-            // eslint-disable-next-line
-            upload.any()(req, res, async err => {
-                if (err) reject(err)
-                else {
-                    const user: User = await this.acountService.convertToUser(
-                        profile
-                    )
-                    let image = ''
-                    // eslint-disable-next-line
-                    const files: any = req.files
-                    // eslint-disable-next-line
-                    files.forEach(async (element: any) => {
-                        const oldImage: URL | undefined = user.image
-                            ? new URL(user.image)
-                            : undefined
-                        image = `${process.env.BASE_URL}/file/image/${element.filename}`
-                        await this.userRepository.updateById(user.id, {
-                            image: image
-                        })
-                        if (oldImage) this.fileService.deleteFile(oldImage)
-                    })
-
-                    resolve({
-                        url: image
-                    })
-                }
-            })
+    @put('/api/account/activation', new AccountSpects().logged())
+    async activationAccount(
+        @requestBody(new AccountSpects().activateAccount())
+        req: {
+            emailAddress: string
+            password: string
+            activationCode: string
+        }
+    ): Promise<{ token: string }> {
+        const user = await this.userRepository.findOne({
+            where: { emailAddress: req.emailAddress }
         })
+        if (!user) throw new HttpErrors.Unauthorized('BAD_ACCOUNT')
+        if (user.confirmationCode !== req.activationCode)
+            throw new HttpErrors.Unauthorized('BAD_CODE')
+        if (user.confirmed) throw new HttpErrors.Unauthorized('ACTIVED_ACCOUNT')
+
+        user.password = await this.passwordHasher.hashPassword(req.password)
+        user.confirmed = true
+
+        await this.userRepository.updateById(user.id, user)
+        // convert a User object into a UserProfile object (reduced set of properties)
+        const userProfile = this.userService.convertToUserProfile(user)
+
+        // create a JSON Web Token based on the user profile
+        const token = await this.jwtService.generateToken(userProfile)
+
+        return { token }
     }
 }

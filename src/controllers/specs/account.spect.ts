@@ -1,6 +1,5 @@
 import { OperationObject } from '@loopback/rest'
 import { RequestBodyObject } from '@loopback/rest'
-import { OPERATION_SECURITY_SPEC } from '../../utils/security.spec'
 
 export default class AccountSpects {
     logged(): OperationObject {
@@ -70,35 +69,31 @@ export default class AccountSpects {
         }
     }
 
-    newAvatar(): OperationObject {
+    activateAccount(): RequestBodyObject {
         return {
-            security: OPERATION_SECURITY_SPEC,
-            responses: {
-                200: {
-                    content: {
-                        'application/json': {
-                            schema: {
-                                properties: {
-                                    url: {
-                                        type: 'string'
-                                    }
-                                }
+            required: true,
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        required: [
+                            'emailAddress',
+                            'activationCode',
+                            'password'
+                        ],
+                        properties: {
+                            emailAddress: {
+                                type: 'string'
+                            },
+                            activationCode: {
+                                type: 'string'
+                            },
+                            password: {
+                                type: 'string',
+                                minLength: 8
                             }
                         }
                     }
-                }
-            }
-        }
-    }
-
-    newFile(): RequestBodyObject {
-        return {
-            description: 'User avatar.',
-            required: true,
-            content: {
-                'multipart/form-data': {
-                    // Skip body parsing
-                    'x-parser': 'stream'
                 }
             }
         }

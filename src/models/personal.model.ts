@@ -5,8 +5,8 @@ import { User } from './user.model'
 @model({
     settings: {
         foreignKeys: {
-            fkProfessionalUser: {
-                name: 'fk_professional_user',
+            fkPersonalUser: {
+                name: 'fk_personal_user',
                 entity: 'dbuser',
                 entityKey: 'id',
                 foreignKey: 'userid'
@@ -14,7 +14,7 @@ import { User } from './user.model'
         }
     }
 })
-export class Professional extends MyModel {
+export class Personal extends MyModel {
     @property({
         type: 'number',
         id: true,
@@ -116,16 +116,26 @@ export class Professional extends MyModel {
     })
     isHired: boolean
 
+    @property({
+        type: 'string',
+        length: 75,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 75
+        }
+    })
+    image?: string
+
     @belongsTo(() => User)
     userId: number
 
-    constructor(data?: Partial<Professional>) {
+    constructor(data?: Partial<Personal>) {
         super(data)
     }
 }
 
-export interface ProfessionalRelations {
+export interface PersonalRelations {
     // describe navigational properties here
 }
 
-export type ProfessionalWithRelations = Professional & ProfessionalRelations
+export type PersonalWithRelations = Personal & PersonalRelations

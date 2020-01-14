@@ -1,18 +1,18 @@
 import { getModelSchemaRef } from '@loopback/rest'
 import { OperationObject } from '@loopback/rest'
 import { RequestBodyObject } from '@loopback/rest'
-import { Professional } from '../../models'
+import { Personal } from '../../models'
 import { OPERATION_SECURITY_SPEC } from '../../utils/security.spec'
 import { Spect } from './stect'
 
-export class ProfessionalSpect extends Spect {
+export class PersonalSpect extends Spect {
     create(): RequestBodyObject {
         return {
             content: {
                 'application/json': {
-                    schema: getModelSchemaRef(Professional, {
-                        title: 'NewProfessional',
-                        exclude: ['createdBy', 'createdAt', 'id']
+                    schema: getModelSchemaRef(Personal, {
+                        title: 'NewPersonal',
+                        exclude: ['createdBy', 'createdAt', 'id', 'image']
                     })
                 }
             }
@@ -26,8 +26,8 @@ export class ProfessionalSpect extends Spect {
                 '200': {
                     content: {
                         'application/json': {
-                            schema: getModelSchemaRef(Professional, {
-                                title: 'CreatedProfessional'
+                            schema: getModelSchemaRef(Personal, {
+                                title: 'CreatedPersonal'
                             })
                         }
                     }
@@ -40,9 +40,9 @@ export class ProfessionalSpect extends Spect {
         return {
             content: {
                 'application/json': {
-                    schema: getModelSchemaRef(Professional, {
-                        title: 'UpdateProfessional',
-                        exclude: ['createdBy', 'createdAt']
+                    schema: getModelSchemaRef(Personal, {
+                        title: 'UpdatePersonal',
+                        exclude: ['createdBy', 'createdAt', 'image']
                     })
                 }
             }
@@ -53,10 +53,10 @@ export class ProfessionalSpect extends Spect {
         return {
             content: {
                 'application/json': {
-                    schema: getModelSchemaRef(Professional, {
-                        title: 'PartialProfessional',
+                    schema: getModelSchemaRef(Personal, {
+                        title: 'PartialPersonal',
                         partial: true,
-                        exclude: ['createdBy', 'createdAt']
+                        exclude: ['createdBy', 'createdAt', 'image']
                     })
                 }
             }
@@ -72,7 +72,7 @@ export class ProfessionalSpect extends Spect {
                         'application/json': {
                             schema: {
                                 type: 'array',
-                                items: getModelSchemaRef(Professional)
+                                items: getModelSchemaRef(Personal)
                             }
                         }
                     }

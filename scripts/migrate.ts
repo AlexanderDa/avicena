@@ -55,7 +55,7 @@ class DefaultValues {
         })
         if (users.count < 1) {
             const user: User = new User({
-                username: 'admin',
+                confirmed: true,
                 emailAddress: 'admin@gmail.com',
                 password: await this.passwordHasher.hashPassword('adminP4$$'),
                 roleId: Roles.Admin.ID

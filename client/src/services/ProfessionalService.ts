@@ -7,7 +7,7 @@ export default class ProfessionalService extends Vue implements Service<Professi
   async create (element: ProfessionalModel): Promise<ProfessionalModel> {
     let professional: ProfessionalModel = new ProfessionalModel()
     try {
-      const res: any = await this.$http.post('/api/professional', this.formBody(element))
+      const res: any = await this.$http.post('/api/personal', this.formBody(element))
       professional = res.body
     } catch (err) {
       throw err
@@ -21,7 +21,7 @@ export default class ProfessionalService extends Vue implements Service<Professi
     let list: ProfessionalModel[] = []
 
     try {
-      const res: any = await this.$http.get('/api/professionals')
+      const res: any = await this.$http.get('/api/personals')
       list = res.body
     } catch (err) {
       throw err
@@ -36,7 +36,7 @@ export default class ProfessionalService extends Vue implements Service<Professi
     let professional: ProfessionalModel = new ProfessionalModel()
 
     try {
-      const res: any = await this.$http.get(`/api/professional/user/${userId}`)
+      const res: any = await this.$http.get(`/api/personal/user/${userId}`)
       professional = res.body
     } catch (err) {
       throw err
@@ -47,7 +47,7 @@ export default class ProfessionalService extends Vue implements Service<Professi
   async updateById (element: ProfessionalModel): Promise<boolean> {
     let updated: boolean = false
     try {
-      const res: any = await this.$http.patch(`/api/professional/${element.id}`, this.formBody(element))
+      const res: any = await this.$http.patch(`/api/personal/${element.id}`, this.formBody(element))
       updated = res.ok
     } catch (err) {
       throw err
@@ -58,7 +58,7 @@ export default class ProfessionalService extends Vue implements Service<Professi
   async deleteById (id: number): Promise<boolean> {
     let success: boolean = false
     try {
-      const res: any = await this.$http.delete(`/api/professional/${id}`)
+      const res: any = await this.$http.delete(`/api/personal/${id}`)
       success = res.ok
     } catch (err) {
       throw err
