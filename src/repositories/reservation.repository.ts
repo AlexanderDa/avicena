@@ -1,7 +1,7 @@
 import { DefaultCrudRepository } from '@loopback/repository'
 import { repository } from '@loopback/repository'
 import { BelongsToAccessor } from '@loopback/repository'
-import { Reservation, Surgeryroom } from '../models'
+import { Reservation, Surgeryroom, SurgicalProcedure } from '../models'
 import { ReservationRelations } from '../models'
 import { Doctor } from '../models'
 import { Honorary } from '../models'
@@ -13,6 +13,7 @@ import { DoctorRepository } from './doctor.repository'
 import { HonoraryRepository } from './honorary.repository'
 import { PeriodRepository } from './period.repository'
 import { SurgeryroomRepository } from './surgeryroom.repository'
+import { SurgicalProcedureRepository } from './surgical-procedure.repository'
 
 export class ReservationRepository extends DefaultCrudRepository<
     Reservation,
@@ -39,6 +40,11 @@ export class ReservationRepository extends DefaultCrudRepository<
         typeof Reservation.prototype.id
     >
 
+    public readonly surgicalProcedure: BelongsToAccessor<
+        SurgicalProcedure,
+        typeof Reservation.prototype.id
+    >
+
     constructor(
         @inject('datasources.pgconfig') dataSource: PgconfigDataSource,
         @repository.getter('DoctorRepository')
@@ -48,9 +54,21 @@ export class ReservationRepository extends DefaultCrudRepository<
         @repository.getter('PeriodRepository')
         protected periodRepositoryGetter: Getter<PeriodRepository>,
         @repository.getter('SurgeryroomRepository')
-        protected surgeryroomRepositoryGetter: Getter<SurgeryroomRepository>
+        protected surgeryroomRepositoryGetter: Getter<SurgeryroomRepository>,
+        @repository.getter('SurgicalProcedureRepository')
+        protected surgicalProcedureRepositoryGetter: Getter<
+            SurgicalProcedureRepository
+        >
     ) {
         super(Reservation, dataSource)
+        this.surgicalProcedure = this.createBelongsToAccessorFor(
+            'procedure',
+            surgicalProcedureRepositoryGetter
+        )
+        this.registerInclusionResolver(
+            'surgicalProcedure',
+            this.surgicalProcedure.inclusionResolver
+        )
         this.surgeryroom = this.createBelongsToAccessorFor(
             'surgeryroom',
             surgeryroomRepositoryGetter

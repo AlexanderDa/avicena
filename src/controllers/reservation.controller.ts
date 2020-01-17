@@ -15,7 +15,7 @@ import { requestBody } from '@loopback/rest'
 import { authenticate } from '@loopback/authentication'
 import { SecurityBindings } from '@loopback/security'
 import { UserProfile } from '@loopback/security'
-import { Reservation } from '../models'
+import { Reservation, User } from '../models'
 import { ReservationRepository } from '../repositories'
 import { ReservationSpect } from './specs/reservation.spect'
 import { AuditTable } from '../services/audit.service'
@@ -41,7 +41,17 @@ export class ReservationController {
         @requestBody(new ReservationSpect().create())
         reservation: Omit<Reservation, 'id'>
     ): Promise<Reservation> {
-        return this.reservationRepository.create(reservation)
+        const me: User = await this.acountService.convertToUser(profile)
+        reservation.createdBy = me.id
+        const saved = await this.reservationRepository.create(reservation)
+        if (saved)
+            await this.auditService.auditCreated(
+                me,
+                AuditTable.RESERVATION,
+                Number(saved.id)
+            )
+
+        return saved
     }
 
     @get('/api/reservations/count', new ReservationSpect().count())

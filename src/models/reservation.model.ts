@@ -6,6 +6,7 @@ import { Doctor } from './doctor.model'
 import { Honorary } from './honorary.model'
 import { Period } from './period.model'
 import { Surgeryroom } from './surgeryroom.model'
+import { SurgicalProcedure } from './surgical-procedure.model'
 
 @model({
     settings: {
@@ -33,6 +34,12 @@ import { Surgeryroom } from './surgeryroom.model'
                 entity: 'Surgeryroom',
                 entityKey: 'id',
                 foreignKey: 'surgeryroomid'
+            },
+            fkReservationSurgicalProcedure: {
+                name: 'fk_reservation_surgical_procedure',
+                entity: 'SurgicalProcedure',
+                entityKey: 'id',
+                foreignKey: 'procedureid'
             }
         }
     }
@@ -44,13 +51,6 @@ export class Reservation extends MyModel {
         generated: true
     })
     id?: number
-
-    @property({
-        type: 'date',
-        required: true,
-        default: new Date()
-    })
-    creationDate: string
 
     @property({
         type: 'date',
@@ -69,6 +69,9 @@ export class Reservation extends MyModel {
 
     @belongsTo(() => Surgeryroom)
     surgeryroomId: number
+
+    @belongsTo(() => SurgicalProcedure)
+    procedureId: number
 
     constructor(data?: Partial<Reservation>) {
         super(data)

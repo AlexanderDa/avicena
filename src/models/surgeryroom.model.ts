@@ -29,6 +29,12 @@ export class Surgeryroom extends MyModel {
     })
     minValue?: number
 
+    @property({
+        type: 'boolean',
+        default: true
+    })
+    isActive?: boolean
+    
     constructor(data?: Partial<Surgeryroom>) {
         super(data)
     }
