@@ -1,20 +1,8 @@
-import { model, property, belongsTo } from '@loopback/repository'
+import { model, property } from '@loopback/repository'
 import { MyModel } from '.'
-import { User } from './user.model'
 
-@model({
-    settings: {
-        foreignKeys: {
-            fkPersonalUser: {
-                name: 'fk_personal_user',
-                entity: 'dbuser',
-                entityKey: 'id',
-                foreignKey: 'userid'
-            }
-        }
-    }
-})
-export class Personal extends MyModel {
+@model()
+export class Patient extends MyModel {
     @property({
         type: 'number',
         id: true,
@@ -52,7 +40,7 @@ export class Personal extends MyModel {
             dataLength: 10
         }
     })
-    dni: string
+    dni?: string
 
     @property({
         type: 'string',
@@ -62,7 +50,53 @@ export class Personal extends MyModel {
             dataLength: 15
         }
     })
-    passport: string
+    passport?: string
+
+    @property({
+        type: 'date',
+        required: true
+    })
+    bornDate: string
+
+    @property({
+        type: 'string',
+        required: true,
+        options: ['Masculino', 'Femenino'],
+        length: 10,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 10
+        }
+    })
+    sex: string
+
+    @property({
+        type: 'string',
+        length: 75,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 75
+        }
+    })
+    profession?: string
+
+    @property({
+        type: 'string',
+        required: true,
+        options: ['Soltero', 'Casado', 'Divorciado', 'Viudo'],
+        length: 30,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 30
+        }
+    })
+    maritalStatus: string
+
+    @property({
+        type: 'string',
+        required: true
+    })
+    address: string
 
     @property({
         type: 'string',
@@ -94,48 +128,13 @@ export class Personal extends MyModel {
     })
     emailAddress?: string
 
-    @property({
-        type: 'string',
-        length: 25,
-        postgresql: {
-            dataType: 'character varying',
-            dataLength: 25
-        }
-    })
-    regProfessional?: string
-
-    @property({
-        type: 'string',
-        required: true
-    })
-    address: string
-
-    @property({
-        type: 'boolean',
-        default: false
-    })
-    isHired: boolean
-
-    @property({
-        type: 'string',
-        length: 75,
-        postgresql: {
-            dataType: 'character varying',
-            dataLength: 75
-        }
-    })
-    image?: string
-
-    @belongsTo(() => User)
-    userId: number
-
-    constructor(data?: Partial<Personal>) {
+    constructor(data?: Partial<Patient>) {
         super(data)
     }
 }
 
-export interface PersonalRelations {
+export interface PatientRelations {
     // describe navigational properties here
 }
 
-export type PersonalWithRelations = Personal & PersonalRelations
+export type PatientWithRelations = Patient & PatientRelations

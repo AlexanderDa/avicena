@@ -15,6 +15,7 @@ export namespace AuditTable {
     export const PERIOD = 'periodo'
     export const HONORARY = 'honorario'
     export const PERSONAL = 'personal'
+    export const PATIENT = 'paciente'
     export const RESERVATION = 'reservación'
     export const SURGERYROOM = 'Quirófano'
     export const SURGICALPROCEDURE = 'Procedimiento'

@@ -1,10 +1,9 @@
 import { DefaultCrudRepository } from '@loopback/repository'
 import { repository } from '@loopback/repository'
 import { BelongsToAccessor } from '@loopback/repository'
-import { Reservation, Surgeryroom, SurgicalProcedure } from '../models'
+import { Reservation, Surgeryroom, SurgicalProcedure, Patient } from '../models'
 import { ReservationRelations } from '../models'
 import { Doctor } from '../models'
-import { Honorary } from '../models'
 import { Period } from '../models'
 import { PgconfigDataSource } from '../datasources'
 import { inject } from '@loopback/core'
@@ -14,6 +13,7 @@ import { HonoraryRepository } from './honorary.repository'
 import { PeriodRepository } from './period.repository'
 import { SurgeryroomRepository } from './surgeryroom.repository'
 import { SurgicalProcedureRepository } from './surgical-procedure.repository'
+import { PatientRepository } from './patient.repository'
 
 export class ReservationRepository extends DefaultCrudRepository<
     Reservation,
@@ -22,11 +22,6 @@ export class ReservationRepository extends DefaultCrudRepository<
 > {
     public readonly doctor: BelongsToAccessor<
         Doctor,
-        typeof Reservation.prototype.id
-    >
-
-    public readonly honorary: BelongsToAccessor<
-        Honorary,
         typeof Reservation.prototype.id
     >
 
@@ -45,6 +40,11 @@ export class ReservationRepository extends DefaultCrudRepository<
         typeof Reservation.prototype.id
     >
 
+    public readonly patient: BelongsToAccessor<
+        Patient,
+        typeof Reservation.prototype.id
+    >
+
     constructor(
         @inject('datasources.pgconfig') dataSource: PgconfigDataSource,
         @repository.getter('DoctorRepository')
@@ -58,12 +58,26 @@ export class ReservationRepository extends DefaultCrudRepository<
         @repository.getter('SurgicalProcedureRepository')
         protected surgicalProcedureRepositoryGetter: Getter<
             SurgicalProcedureRepository
-        >
+        >,
+        @repository.getter('PatientRepository')
+        protected patientRepositoryGetter: Getter<PatientRepository>
     ) {
         super(Reservation, dataSource)
+        this.patient = this.createBelongsToAccessorFor(
+            'patient',
+            patientRepositoryGetter
+        )
+        this.registerInclusionResolver(
+            'patient',
+            this.patient.inclusionResolver
+        )
         this.surgicalProcedure = this.createBelongsToAccessorFor(
             'procedure',
             surgicalProcedureRepositoryGetter
+        )
+        this.registerInclusionResolver(
+            'procedure',
+            this.surgicalProcedure.inclusionResolver
         )
         this.registerInclusionResolver(
             'surgicalProcedure',
@@ -82,14 +96,7 @@ export class ReservationRepository extends DefaultCrudRepository<
             periodRepositoryGetter
         )
         this.registerInclusionResolver('period', this.period.inclusionResolver)
-        this.honorary = this.createBelongsToAccessorFor(
-            'honorary',
-            honoraryRepositoryGetter
-        )
-        this.registerInclusionResolver(
-            'honorary',
-            this.honorary.inclusionResolver
-        )
+
         this.doctor = this.createBelongsToAccessorFor(
             'doctor',
             doctorRepositoryGetter

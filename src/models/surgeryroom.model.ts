@@ -34,7 +34,7 @@ export class Surgeryroom extends MyModel {
         default: true
     })
     isActive?: boolean
-    
+
     constructor(data?: Partial<Surgeryroom>) {
         super(data)
     }

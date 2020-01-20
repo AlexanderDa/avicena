@@ -15,20 +15,20 @@ import { requestBody } from '@loopback/rest'
 import { authenticate, UserService } from '@loopback/authentication'
 import { SecurityBindings } from '@loopback/security'
 import { UserProfile } from '@loopback/security'
-import { SurgicalProcedure, User } from '../models'
-import { SurgicalProcedureRepository } from '../repositories'
+import { Patient, User } from '../models'
+import { PatientRepository } from '../repositories'
 import { Credentials } from '../../common/Credentials'
 import { UserBindings } from '../keys'
 import { AccountBindings } from '../keys'
 import { AuditBindings } from '../keys'
 import { AccountService } from '../services/account.service'
 import { AuditService, AuditTable } from '../services/audit.service'
-import { SurgicalProcedureSpect } from './specs/surgicalprocedure.spect'
+import { PatientSpect } from './specs/patient.spect'
 
-export class SurgicalProcedureController {
+export class PatientController {
     constructor(
-        @repository(SurgicalProcedureRepository)
-        public procedureRepository: SurgicalProcedureRepository,
+        @repository(PatientRepository)
+        public patientRepository: PatientRepository,
         @inject(UserBindings.USER_SERVICE)
         public userService: UserService<User, Credentials>,
         @inject(AccountBindings.ACCOUNT_SERVICE)
@@ -37,94 +37,102 @@ export class SurgicalProcedureController {
         public auditService: AuditService
     ) {}
 
-    @post('/api/surgicalprocedure', new SurgicalProcedureSpect().created())
+    @post('/api/patient', new PatientSpect().created())
     @authenticate('jwt')
     async create(
         @inject(SecurityBindings.USER) profile: UserProfile,
-        @requestBody(new SurgicalProcedureSpect().create())
-        procedure: Omit<SurgicalProcedure, 'id'>
-    ): Promise<SurgicalProcedure> {
+        @requestBody(new PatientSpect().create()) patient: Omit<Patient, 'id'>
+    ): Promise<Patient> {
         const me: User = await this.acountService.convertToUser(profile)
-        procedure.createdBy = me.id
-        const saved = await this.procedureRepository.create(procedure)
+        patient.createdBy = me.id
+        const saved = await this.patientRepository.create(patient)
         if (saved)
             await this.auditService.auditCreated(
                 me,
-                AuditTable.SURGICALPROCEDURE,
+                AuditTable.PATIENT,
                 Number(saved.id)
             )
 
         return saved
     }
 
-    @get('/api/surgicalprocedures/count', new SurgicalProcedureSpect().count())
+    @get('/api/patients/count', new PatientSpect().count())
     @authenticate('jwt')
     async count(
         @inject(SecurityBindings.USER) profile: UserProfile,
-        @param.query.object('where', getWhereSchemaFor(SurgicalProcedure))
-        where?: Where<SurgicalProcedure>
+        @param.query.object('where', getWhereSchemaFor(Patient))
+        where?: Where<Patient>
     ): Promise<Count> {
-        return this.procedureRepository.count(where)
+        return this.patientRepository.count(where)
     }
 
-    @get('/api/surgicalprocedures', new SurgicalProcedureSpect().found())
+    @get('/api/patients', new PatientSpect().found())
     @authenticate('jwt')
     async find(
         @inject(SecurityBindings.USER) profile: UserProfile,
-        @param.query.object('filter', getFilterSchemaFor(SurgicalProcedure))
-        filter?: Filter<SurgicalProcedure>
-    ): Promise<SurgicalProcedure[]> {
-        return this.procedureRepository.find(filter)
+        @param.query.object('filter', getFilterSchemaFor(Patient))
+        filter?: Filter<Patient>
+    ): Promise<Patient[]> {
+        return this.patientRepository.find(filter)
     }
 
     @patch(
-        '/api/surgicalprocedures',
-        new SurgicalProcedureSpect().count(
-            'SurgicalProcedure PATCH success count'
-        )
+        '/api/patients',
+        new PatientSpect().count('Patient PATCH success count')
     )
     @authenticate('jwt')
     async updateAll(
         @inject(SecurityBindings.USER) profile: UserProfile,
-        @requestBody(new SurgicalProcedureSpect().partial())
-        procedure: SurgicalProcedure,
-        @param.query.object('where', getWhereSchemaFor(SurgicalProcedure))
-        where?: Where<SurgicalProcedure>
+        @requestBody(new PatientSpect().partial())
+        patient: Patient,
+        @param.query.object('where', getWhereSchemaFor(Patient))
+        where?: Where<Patient>
     ): Promise<Count> {
-        return this.procedureRepository.updateAll(procedure, where)
+        return this.patientRepository.updateAll(patient, where)
     }
 
-    @get('/api/surgicalprocedure/{id}', new SurgicalProcedureSpect().created())
+    @get('/api/patient/{id}', new PatientSpect().created())
     @authenticate('jwt')
     async findById(
         @inject(SecurityBindings.USER) profile: UserProfile,
         @param.path.number('id') id: number
-    ): Promise<SurgicalProcedure> {
-        return this.procedureRepository.findById(id)
+    ): Promise<Patient> {
+        return this.patientRepository.findById(id)
     }
 
     @patch(
-        '/api/surgicalprocedure/{id}',
-        new SurgicalProcedureSpect().simple('SurgicalProcedure PATCH success')
+        '/api/patient/{id}',
+        new PatientSpect().simple('Patient PATCH success')
     )
     @authenticate('jwt')
     async updateById(
         @inject(SecurityBindings.USER) profile: UserProfile,
         @param.path.number('id') id: number,
-        @requestBody(new SurgicalProcedureSpect().update())
-        procedure: SurgicalProcedure
+        @requestBody(new PatientSpect().update())
+        patient: Patient
     ): Promise<void> {
         const me: User = await this.acountService.convertToUser(profile)
-        procedure.createdBy = me.id
+        patient.createdBy = me.id
 
         try {
-            await this.procedureRepository.updateById(id, procedure)
-            const log = new SurgicalProcedure({
-                name: procedure.name
+            await this.patientRepository.updateById(id, patient)
+            const log = new Patient({
+                lastName: patient.lastName,
+                firstName: patient.firstName,
+                dni: patient.dni,
+                passport: patient.passport,
+                bornDate: patient.bornDate,
+                sex: patient.sex,
+                profession: patient.profession,
+                maritalStatus: patient.maritalStatus,
+                address: patient.address,
+                telephone: patient.telephone,
+                mobile: patient.mobile,
+                emailAddress: patient.emailAddress
             })
             await this.auditService.auditUpdated(
                 me,
-                AuditTable.SURGICALPROCEDURE,
+                AuditTable.PATIENT,
                 id,
                 JSON.stringify(log)
             )
@@ -133,22 +141,19 @@ export class SurgicalProcedureController {
         }
     }
 
-    @put(
-        '/api/surgicalprocedure/{id}',
-        new SurgicalProcedureSpect().simple('SurgicalProcedure PUT success')
-    )
+    @put('/api/patient/{id}', new PatientSpect().simple('Patient PUT success'))
     @authenticate('jwt')
     async replaceById(
         @inject(SecurityBindings.USER) profile: UserProfile,
         @param.path.number('id') id: number,
-        @requestBody() procedure: SurgicalProcedure
+        @requestBody() patient: Patient
     ): Promise<void> {
-        await this.procedureRepository.replaceById(id, procedure)
+        await this.patientRepository.replaceById(id, patient)
     }
 
     @del(
-        '/api/surgicalprocedure/{id}',
-        new SurgicalProcedureSpect().simple('SurgicalProcedure DELETE success')
+        '/api/patient/{id}',
+        new PatientSpect().simple('Patient DELETE success')
     )
     @authenticate('jwt')
     async deleteById(
@@ -156,10 +161,10 @@ export class SurgicalProcedureController {
         @param.path.number('id') id: number
     ): Promise<void> {
         try {
-            await this.procedureRepository.deleteById(id)
+            await this.patientRepository.deleteById(id)
             await this.auditService.auditDeleted(
                 await this.acountService.convertToUser(profile),
-                AuditTable.SURGICALPROCEDURE,
+                AuditTable.PATIENT,
                 id
             )
         } catch (err) {

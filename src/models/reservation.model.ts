@@ -3,10 +3,10 @@ import { belongsTo } from '@loopback/repository'
 import { property } from '@loopback/repository'
 import { MyModel } from '.'
 import { Doctor } from './doctor.model'
-import { Honorary } from './honorary.model'
 import { Period } from './period.model'
 import { Surgeryroom } from './surgeryroom.model'
 import { SurgicalProcedure } from './surgical-procedure.model'
+import { Patient } from './patient.model'
 
 @model({
     settings: {
@@ -17,11 +17,11 @@ import { SurgicalProcedure } from './surgical-procedure.model'
                 entityKey: 'id',
                 foreignKey: 'doctorid'
             },
-            fkReservationHonorary: {
-                name: 'fk_reservation_honorary',
-                entity: 'Honorary',
+            fkReservationPatient: {
+                name: 'fk_reservation_patient',
+                entity: 'Patient',
                 entityKey: 'id',
-                foreignKey: 'honoraryid'
+                foreignKey: 'patientid'
             },
             fkReservationPeriod: {
                 name: 'fk_reservation_period',
@@ -61,9 +61,6 @@ export class Reservation extends MyModel {
     @belongsTo(() => Doctor)
     doctorId: number
 
-    @belongsTo(() => Honorary)
-    honoraryId: number
-
     @belongsTo(() => Period)
     periodId: number
 
@@ -72,6 +69,9 @@ export class Reservation extends MyModel {
 
     @belongsTo(() => SurgicalProcedure)
     procedureId: number
+
+    @belongsTo(() => Patient)
+    patientId: number
 
     constructor(data?: Partial<Reservation>) {
         super(data)

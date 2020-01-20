@@ -1,6 +1,6 @@
 export function randomString(length: number, date?: boolean): string {
     const characters =
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%'
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$'
     let random = ''
     for (let i = 0; i < length; i++) {
         random += characters.charAt(
