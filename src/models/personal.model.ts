@@ -111,12 +111,6 @@ export class Personal extends MyModel {
     address: string
 
     @property({
-        type: 'boolean',
-        default: false
-    })
-    isHired: boolean
-
-    @property({
         type: 'string',
         length: 75,
         postgresql: {

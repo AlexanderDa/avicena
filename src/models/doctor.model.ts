@@ -13,6 +13,12 @@ import { Personal } from './personal.model'
                 entityKey: 'id',
                 foreignKey: 'personalid'
             }
+        },
+        indexes: {
+            uniquePersonal: {
+                keys: { personalId: 1 },
+                options: { unique: true }
+            }
         }
     }
 })
@@ -24,7 +30,101 @@ export class Doctor extends MyModel {
     })
     id?: number
 
-    @belongsTo(() => Personal)
+    @property({
+        type: 'string',
+        required: true,
+        length: 30,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 30
+        }
+    })
+    lastName: string
+
+    @property({
+        type: 'string',
+        required: true,
+        length: 30,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 30
+        }
+    })
+    firstName: string
+
+    @property({
+        type: 'string',
+        length: 10,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 10
+        }
+    })
+    dni: string
+
+    @property({
+        type: 'string',
+        length: 15,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 15
+        }
+    })
+    passport: string
+
+    @property({
+        type: 'string',
+        length: 15,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 15
+        }
+    })
+    telephone?: string
+
+    @property({
+        type: 'string',
+        length: 15,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 15
+        }
+    })
+    mobile?: string
+
+    @property({
+        type: 'string',
+        length: 50,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 50
+        }
+    })
+    emailAddress?: string
+
+    @property({
+        type: 'string',
+        length: 25,
+        postgresql: {
+            dataType: 'character varying',
+            dataLength: 25
+        }
+    })
+    regProfessional?: string
+
+    @property({
+        type: 'string',
+        required: true
+    })
+    address: string
+
+    @property({
+        type: 'boolean',
+        default: false,
+    })
+    isHired: boolean
+
+    @belongsTo(() => Personal, {}, { required: true })
     personalId: number
 
     constructor(data?: Partial<Doctor>) {
