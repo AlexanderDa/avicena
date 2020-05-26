@@ -66,9 +66,9 @@ export class ExpressServer {
         await pEvent(this.server, 'listening')
         console.log(`App running at:`)
         console.log(`- Mode:    \x1b[36m${process.env.NODE_ENV}\x1b[0m`)
-        console.log(
-            `- Network: \x1b[36mhttp://${host || '127.0.0.1'}:${port}/\x1b[0m`
-        )
+        console.log(`- Network: \x1b[36mhttp://${host || '127.0.0.1'}:${port}/\x1b[0m`)
+        if (process.env.NODE_ENV === 'development')
+            console.log(`- Apis:    \x1b[36mhttp://${host || '127.0.0.1'}:${port}/api/explorer/\x1b[0m`)
     }
 
     // For testing purposes

@@ -8,8 +8,6 @@
     "build": "lb-tsc",
     "build:watch": "lb-tsc --watch",
     "clean": "lb-clean dist *.tsbuildinfo",
-    "lint": "npm run prettier:fix && npm run eslint && npm run eslint:client",
-    "eslint:client": "cd client && npm run lint",
     "eslint": "lb-eslint --report-unused-disable-directives .",
     "eslint:fix": "npm run eslint -- --fix",
     "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
@@ -22,7 +20,6 @@
     "docker:build": "docker build -t avicena .",
     "docker:run": "docker run -p 3000:3000 -d avicena",
     "prestart": "npm run build",
-    "serve": "npm run start & cd client && npm run serve",
     "start": "node -r source-map-support/register .",
     "cli": "node dist/scripts",
     "prepublishOnly": "npm run test"
